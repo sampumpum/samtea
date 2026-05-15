@@ -2,6 +2,45 @@
 const tg = window.Telegram?.WebApp;
 if (tg) { tg.ready(); tg.expand(); }
 
+// ── ФОТО ─────────────────────────────────────────────────────────────────────
+const BASE_IMG = 'https://raw.githubusercontent.com/sampumpum/samtea/main/images/';
+
+const IMAGES = {
+  1:  ['lao_cha_tou_1.jpeg'],
+  2:  [],
+  3:  ['dyan_hun_tszin_lo_1.jpeg','dyan_hun_tszin_lo_2.jpeg','dyan_hun_tszin_lo_3.jpeg'],
+  4:  ['da_tszin_chzhen_van_1.jpg','da_tszin_chzhen_van_2.jpg','da_tszin_chzhen_van_3.jpg','da_tszin_chzhen_van_4.JPG','da_tszin_chzhen_van_5.jpeg'],
+  5:  ['ya_shi_syan_1.jpeg'],
+  6:  ['mi_lan_syan_1.jpeg'],
+  7:  ['bay_zhuy_syan_1.jpg','bay_zhuy_syan_2.jpg','bay_zhuy_syan_3.jpg'],
+  8:  ['zhow_guy_1.jpeg'],
+  9:  ['teguanyin_tsinsyan_1.jpeg'],
+  10: ['molochniy_ulung_1.jpeg'],
+  11: ['gaba_korol_1.jpg','gaba_korol_2.jpg','gaba_korol_3.jpg'],
+  12: ['gaba_krasniy_korall_1.jpg','gaba_krasniy_korall_2.jpg','gaba_krasniy_korall_3.jpg','gaba_krasniy_korall_4.jpg'],
+  13: ['moli_bay_lun_chzhu_1.jpeg'],
+  14: ['shoumey_2015_1.jpeg'],
+  15: ['da_hun_pao_1.jpeg'],
+  20: ['shu_ivou_2008_1.jpeg'],
+};
+
+function getImg(id) {
+  const list = IMAGES[id];
+  if (!list || !list.length) return null;
+  return BASE_IMG + list[0];
+}
+
+function getAllImgs(id) {
+  const list = IMAGES[id] || [];
+  return list.map(f => BASE_IMG + f);
+}
+
+function imgOrEmoji(tea) {
+  const src = getImg(tea.id);
+  if (src) return `<img src="${src}" alt="${tea.name}" style="width:100%;height:100%;object-fit:cover;border-radius:10px" onerror="this.parentNode.innerHTML='${tea.emoji}'" loading="lazy">`;
+  return tea.emoji;
+}
+
 let cart = [];
 let currentTea = null;
 let currentCat = 'all';
@@ -72,7 +111,7 @@ function renderMain() {
           ${[
             ['all','Все'], ['shu','Шу пуэр'], ['red','Красный'],
             ['ulung','Улун'], ['gaba','ГАБА'], ['green','Зелёный'],
-            ['white','Белый']
+            ['white','Белый'], ['exclusive','💎 Эксклюзив']
           ].map(([c,l]) => `<div class="cat-pill${currentCat===c?' active':''}" onclick="filterCat('${c}',this)">${l}</div>`).join('')}
         </div>
         <div class="tea-list" id="tea-list"></div>
@@ -111,23 +150,28 @@ function renderTeaList(cat) {
   const list = document.getElementById('tea-list');
   if (!list) return;
   const filtered = cat === 'all' ? TEAS : TEAS.filter(t => t.cat === cat);
-  list.innerHTML = filtered.map(t => `
+  list.innerHTML = filtered.map(t => {
+    const src = getImg(t.id);
+    const thumb = src
+      ? `<div class="tea-emoji" style="overflow:hidden;padding:0"><img src="${src}" alt="${t.name}" style="width:100%;height:100%;object-fit:cover;border-radius:10px" onerror="this.parentNode.innerHTML='${t.emoji}'" loading="lazy"></div>`
+      : `<div class="tea-emoji">${t.emoji}</div>`;
+    return `
     <div class="tea-card" onclick="showDetail(${t.id})">
-      <div class="tea-emoji">${t.emoji}</div>
+      ${thumb}
       <div class="tea-info">
         <div class="tea-name">${t.name}</div>
         <div class="tea-cn">${t.subtitle}</div>
         <div class="tea-tags">
           ${t.tags.slice(0,2).map(tg => `<span class="tag">${tg}</span>`).join('')}
           ${t.status === 'wb' ? '<span class="tag wb">WB</span>' : ''}
+          ${t.exclusive ? '<span class="tag" style="color:#c8891a;border-color:rgba(200,137,26,0.4)">💎 эксклюзив</span>' : ''}
         </div>
       </div>
       <div class="tea-right">
         <div class="tea-price">${t.price} ₽</div>
         <div class="tea-weight">${t.weight}</div>
       </div>
-    </div>
-  `).join('') || '<div style="color:var(--text3);padding:20px;text-align:center;font-size:13px">Скоро появятся</div>';
+    </div>`}).join('') || '<div style="color:var(--text3);padding:20px;text-align:center;font-size:13px">Скоро появятся</div>';
 }
 
 function filterCat(cat, el) {
@@ -145,27 +189,57 @@ function showDetail(id) {
   const t = currentTea;
   const el = document.getElementById('screen-detail');
   const isWB = t.status === 'wb';
+  const imgs = getAllImgs(t.id);
+  window._currentSize = t.sizes ? t.sizes[t.sizes.length > 1 ? 1 : 0] : null;
+
+  function heroHtml() {
+    if (!imgs.length) return `<div class="detail-hero">${t.emoji}</div>`;
+    if (imgs.length === 1) return `<div class="detail-hero" style="padding:0;overflow:hidden"><img src="${imgs[0]}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'" loading="lazy"></div>`;
+    return `<div class="detail-hero" style="padding:0;overflow:hidden;position:relative">
+      <img id="gallery-img" src="${imgs[0]}" style="width:100%;height:100%;object-fit:cover" loading="lazy">
+      <div style="position:absolute;bottom:8px;right:10px;display:flex;gap:4px">
+        ${imgs.map((_,i) => `<div onclick="showGalleryImg(${i})" id="gdot-${i}" style="width:6px;height:6px;border-radius:50%;cursor:pointer;background:${i===0?'#fff':'rgba(255,255,255,0.5)'}"></div>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  function sizesHtml(selG) {
+    if (!t.sizes || t.sizes.length <= 1) return '';
+    return `<div style="margin-bottom:14px">
+      <div class="brew-label">Выбери фасовку</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        ${t.sizes.map(s => `<button onclick="selectSize(${s.g},${s.price})"
+          style="padding:7px 14px;border-radius:20px;border:0.5px solid ${s.g===selG?'var(--gold)':'var(--border)'};
+          background:${s.g===selG?'var(--gold)':'var(--surface)'};
+          color:${s.g===selG?'var(--bg)':'var(--text2)'};
+          font-size:12px;cursor:pointer;font-family:var(--font-sans)">${s.g}г · ${s.price} ₽</button>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  const initPrice = window._currentSize ? window._currentSize.price : t.price;
+  const initG = window._currentSize ? window._currentSize.g : null;
 
   el.innerHTML = `
     <div class="header">
-      <button class="back-btn" onclick="showScreen('screen-main')">
-        <i class="ti ti-arrow-left"></i> Назад
-      </button>
+      <button class="back-btn" onclick="showScreen('screen-main')"><i class="ti ti-arrow-left"></i> Назад</button>
       <div style="font-size:11px;color:var(--text3)">${t.cn}</div>
     </div>
-    <div class="detail-hero">${t.emoji}</div>
+    ${heroHtml()}
     <div class="detail-scroll">
       <div class="detail-name">${t.name}</div>
       <div class="detail-cn">${t.subtitle} · ${t.cn}</div>
       <div class="price-row">
-        <div class="detail-price">${t.price} ₽</div>
-        <div class="detail-weight">${t.weight}</div>
+        <div class="detail-price" id="cur-price">${initPrice} ₽</div>
+        <div class="detail-weight">${initG ? initG+'г' : t.weight}</div>
       </div>
       <div class="status-row">
-        <div class="dot ${isWB ? 'dot-blue' : 'dot-green'}"></div>
-        <div class="status-text">${isWB ? 'Доступен на Wildberries' : 'Есть в наличии'}</div>
+        <div class="dot ${isWB?'dot-blue':'dot-green'}"></div>
+        <div class="status-text">${isWB?'Доступен на Wildberries':'Есть в наличии'}</div>
       </div>
+      ${t.exclusive?`<div style="background:rgba(200,137,26,0.1);border:0.5px solid rgba(200,137,26,0.3);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:14px;font-size:12px;color:var(--gold-light)">💎 Эксклюзив — редкий лот из личной коллекции</div>`:''}
       <div class="quote-block">${t.quote}</div>
+      <div id="sizes-wrap">${sizesHtml(initG)}</div>
       <div class="brew-label">Как заваривать</div>
       <div class="brew-grid">
         <div class="brew-cell"><div class="brew-val">${t.brew.g}</div><div class="brew-key">на 150мл</div></div>
@@ -173,18 +247,48 @@ function showDetail(id) {
         <div class="brew-cell"><div class="brew-val">${t.brew.s}</div><div class="brew-key">1й пролив</div></div>
         <div class="brew-cell"><div class="brew-val">${t.brew.prolivs}</div><div class="brew-key">проливов</div></div>
       </div>
-      ${t.coldBrew ? `<div class="cold-brew-badge"><i class="ti ti-snowflake"></i>Подходит для холодного заваривания (6ч в холодильнике)</div>` : ''}
-      <div class="detail-tags">${t.tags.map(tg => `<span class="detail-tag">${tg}</span>`).join('')}</div>
-      ${t.desc ? `<div style="font-size:13px;color:var(--text2);line-height:1.65">${t.desc}</div>` : ''}
+      ${t.coldBrew?`<div class="cold-brew-badge"><i class="ti ti-snowflake"></i>Подходит для холодного заваривания (6ч в холодильнике)</div>`:''}
+      <div class="detail-tags">${t.tags.map(tg=>`<span class="detail-tag">${tg}</span>`).join('')}</div>
+      ${t.desc?`<div style="font-size:13px;color:var(--text2);line-height:1.65;margin-top:14px">${t.desc}</div>`:''}
     </div>
     <div class="action-bar">
       ${isWB
-        ? `<button class="btn-secondary" onclick="window.open('${t.wb}','_blank')"><i class="ti ti-external-link"></i> Купить на Wildberries</button>`
-        : `<button class="btn-primary" onclick="addToCart(${t.id})">В корзину — ${t.price} ₽</button>`
-      }
-    </div>
-  `;
+        ?`<button class="btn-secondary" onclick="window.open('${t.wb}','_blank')"><i class="ti ti-external-link"></i> Купить на Wildberries</button>`
+        :`<button class="btn-primary" onclick="addToCart(${t.id})">В корзину — <span id="btn-p">${initPrice}</span> ₽</button>`}
+    </div>`;
   showScreen('screen-detail');
+}
+
+function showGalleryImg(i) {
+  const imgs = getAllImgs(currentTea?.id);
+  const el = document.getElementById('gallery-img');
+  if (el && imgs[i]) el.src = imgs[i];
+  document.querySelectorAll('[id^="gdot-"]').forEach((d,idx) => {
+    d.style.background = idx===i ? '#fff' : 'rgba(255,255,255,0.5)';
+  });
+}
+
+function selectSize(g, price) {
+  window._currentSize = {g, price};
+  const cp = document.getElementById('cur-price');
+  const bp = document.getElementById('btn-p');
+  if (cp) cp.textContent = price + ' ₽';
+  if (bp) bp.textContent = price;
+  const sw = document.getElementById('sizes-wrap');
+  if (sw && currentTea?.sizes) {
+    sw.innerHTML = (() => {
+      return `<div style="margin-bottom:14px">
+        <div class="brew-label">Выбери фасовку</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          ${currentTea.sizes.map(s=>`<button onclick="selectSize(${s.g},${s.price})"
+            style="padding:7px 14px;border-radius:20px;border:0.5px solid ${s.g===g?'var(--gold)':'var(--border)'};
+            background:${s.g===g?'var(--gold)':'var(--surface)'};
+            color:${s.g===g?'var(--bg)':'var(--text2)'};
+            font-size:12px;cursor:pointer;font-family:var(--font-sans)">${s.g}г · ${s.price} ₽</button>`).join('')}
+        </div>
+      </div>`;
+    })();
+  }
 }
 
 // ── CART ──────────────────────────────────────────────────────────────────────
@@ -237,14 +341,50 @@ function renderCart() {
 
 function checkout() {
   if (cart.length === 0) return;
-  const total = cart.reduce((s, i) => s + i.price, 0);
+  const total = cart.reduce((s,i) => s + i.price, 0);
   const items = cart.map(i => `• ${i.name} ${i.weight} — ${i.price} ₽`).join('\n');
-  const msg = `🛒 Новый заказ SAM TEA\n\n${items}\n\nИтого: ${total} ₽\n\nДоставка или самовывоз?`;
-  if (tg) {
-    tg.sendData(JSON.stringify({ type: 'order', items: cart.map(i => ({ id: i.id, name: i.name, price: i.price })), total }));
-  } else {
-    alert(msg);
-  }
+  const el = document.getElementById('screen-cart');
+
+  // QR-код СБП через бесплатный API
+  const sbpUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`https://qr.nspk.ru/AS1002${PAYMENT.sbp_phone.replace(/\D/g,'')}?name=SAM TEA&sum=${total*100}&cur=RUB`)}`;
+
+  el.innerHTML = `
+    <div class="header">
+      <button class="back-btn" onclick="renderCart()"><i class="ti ti-arrow-left"></i> Назад</button>
+      <div class="logo">Оплата</div>
+    </div>
+    <div style="flex:1;overflow-y:auto;padding:20px 16px">
+      <div style="text-align:center;margin-bottom:20px">
+        <div style="font-size:28px;font-weight:500;color:var(--text);margin-bottom:4px">${total} ₽</div>
+        <div style="font-size:13px;color:var(--text3)">${cart.length} позиц${cart.length===1?'ия':cart.length<5?'ии':'ий'}</div>
+      </div>
+
+      <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center;margin-bottom:14px">
+        <div style="font-size:11px;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px">Оплата по СБП</div>
+        <img src="${sbpUrl}" style="width:180px;height:180px;border-radius:8px;margin-bottom:12px" alt="QR СБП">
+        <div style="font-size:13px;color:var(--text2);margin-bottom:4px">Наведи камеру на QR-код</div>
+        <div style="font-size:12px;color:var(--text3)">${PAYMENT.sbp_phone} · ${PAYMENT.sbp_bank}</div>
+      </div>
+
+      <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:14px">
+        <div style="font-size:11px;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px">Или наличными при встрече</div>
+        <div style="font-size:13px;color:var(--text2);margin-bottom:12px">Напиши Сэму — договоримся о доставке по Москве или самовывозе</div>
+        <button onclick="window.open('https://t.me/${PAYMENT.telegram_username}?text=${encodeURIComponent('Привет! Хочу заказать:\n'+items+'\n\nИтого: '+total+' ₽')}','_blank')"
+          class="btn-primary" style="font-size:13px;padding:12px">
+          <i class="ti ti-brand-telegram"></i> Написать Сэму в Telegram
+        </button>
+      </div>
+
+      <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px">
+        <div style="font-size:11px;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px">Доставка</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.6">🚗 Курьер по Москве — договорная<br>📦 СДЭК по России — от 300 ₽<br>🤝 Самовывоз — бесплатно</div>
+      </div>
+
+      <div style="margin-top:14px;padding:12px;border-radius:var(--radius-sm);background:rgba(200,137,26,0.08);border:0.5px solid var(--gold-border)">
+        <div style="font-size:11px;color:var(--gold-light);line-height:1.6">После оплаты пришли скриншот чека в Telegram — подтвержу заказ и свяжусь для уточнения деталей доставки.</div>
+      </div>
+    </div>`;
+  showScreen('screen-cart');
 }
 
 // ── MOOD FLOW ─────────────────────────────────────────────────────────────────
