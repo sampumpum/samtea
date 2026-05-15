@@ -3,7 +3,7 @@ const tg = window.Telegram?.WebApp;
 if (tg) { tg.ready(); tg.expand(); }
 
 // ── ФОТО ─────────────────────────────────────────────────────────────────────
-const BASE_IMG = 'https://raw.githubusercontent.com/sampumpum/samtea/main/images/';
+const BASE_IMG = 'https://raw.githubusercontent.com/sampumpum/samtea/main/';
 
 const IMAGES = {
   1:  ['lao_cha_tou_1.jpeg'],
@@ -345,8 +345,14 @@ function checkout() {
   const items = cart.map(i => `• ${i.name} ${i.weight} — ${i.price} ₽`).join('\n');
   const el = document.getElementById('screen-cart');
 
-  // QR-код СБП через бесплатный API
-  const sbpUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`https://qr.nspk.ru/AS1002${PAYMENT.sbp_phone.replace(/\D/g,'')}?name=SAM TEA&sum=${total*100}&cur=RUB`)}`;
+  // Реквизиты — хардкод
+  const PHONE = '+79853422921';
+  const BANK = 'Сбер / Т-Банк / ВТБ';
+  const TG = 'samtruesam';
+
+  // QR-код — просто показываем номер телефона для СБП
+  // (НСПК QR требует регистрации, используем текстовый вариант)
+  const orderText = encodeURIComponent('Привет! Хочу заказать:\n' + items + '\n\nИтого: ' + total + ' ₽');
 
   el.innerHTML = `
     <div class="header">
@@ -355,33 +361,36 @@ function checkout() {
     </div>
     <div style="flex:1;overflow-y:auto;padding:20px 16px">
       <div style="text-align:center;margin-bottom:20px">
-        <div style="font-size:28px;font-weight:500;color:var(--text);margin-bottom:4px">${total} ₽</div>
+        <div style="font-size:32px;font-weight:500;color:var(--text);margin-bottom:4px">${total} ₽</div>
         <div style="font-size:13px;color:var(--text3)">${cart.length} позиц${cart.length===1?'ия':cart.length<5?'ии':'ий'}</div>
       </div>
 
-      <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center;margin-bottom:14px">
-        <div style="font-size:11px;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px">Оплата по СБП</div>
-        <img src="${sbpUrl}" style="width:180px;height:180px;border-radius:8px;margin-bottom:12px" alt="QR СБП">
-        <div style="font-size:13px;color:var(--text2);margin-bottom:4px">Наведи камеру на QR-код</div>
-        <div style="font-size:12px;color:var(--text3)">${PAYMENT.sbp_phone} · ${PAYMENT.sbp_bank}</div>
+      <div style="background:var(--surface);border:0.5px solid var(--gold-border);border-radius:var(--radius);padding:20px;text-align:center;margin-bottom:14px">
+        <div style="font-size:11px;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:14px">Оплата по СБП</div>
+        <div style="font-size:28px;font-weight:500;color:var(--text);letter-spacing:0.05em;margin-bottom:6px">+7 985 342-29-21</div>
+        <div style="font-size:13px;color:var(--text2);margin-bottom:4px">${BANK}</div>
+        <div style="font-size:12px;color:var(--text3);margin-top:8px">Получатель: Александр К.</div>
+        <div style="margin-top:14px;padding:10px;background:var(--bg3);border-radius:var(--radius-sm)">
+          <div style="font-size:12px;color:var(--text3);line-height:1.6">Открой приложение банка → Переводы → По номеру телефона → введи номер выше → укажи сумму <strong style="color:var(--text)">${total} ₽</strong></div>
+        </div>
       </div>
 
       <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:14px">
         <div style="font-size:11px;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px">Или наличными при встрече</div>
         <div style="font-size:13px;color:var(--text2);margin-bottom:12px">Напиши Сэму — договоримся о доставке по Москве или самовывозе</div>
-        <button onclick="window.open('https://t.me/${PAYMENT.telegram_username}?text=${encodeURIComponent('Привет! Хочу заказать:\n'+items+'\n\nИтого: '+total+' ₽')}','_blank')"
-          class="btn-primary" style="font-size:13px;padding:12px">
-          <i class="ti ti-brand-telegram"></i> Написать Сэму в Telegram
-        </button>
+        <a href="https://t.me/${TG}?text=${orderText}" target="_blank"
+          style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;background:var(--gold);color:var(--bg);border-radius:var(--radius);font-size:14px;font-weight:600;text-decoration:none;font-family:var(--font-sans)">
+          ✈️ Написать Сэму в Telegram
+        </a>
       </div>
 
-      <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px">
+      <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:14px">
         <div style="font-size:11px;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px">Доставка</div>
-        <div style="font-size:13px;color:var(--text2);line-height:1.6">🚗 Курьер по Москве — договорная<br>📦 СДЭК по России — от 300 ₽<br>🤝 Самовывоз — бесплатно</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.8">🚗 Курьер по Москве — договорная<br>📦 СДЭК по России — от 300 ₽<br>🤝 Самовывоз — бесплатно</div>
       </div>
 
-      <div style="margin-top:14px;padding:12px;border-radius:var(--radius-sm);background:rgba(200,137,26,0.08);border:0.5px solid var(--gold-border)">
-        <div style="font-size:11px;color:var(--gold-light);line-height:1.6">После оплаты пришли скриншот чека в Telegram — подтвержу заказ и свяжусь для уточнения деталей доставки.</div>
+      <div style="padding:12px;border-radius:var(--radius-sm);background:rgba(200,137,26,0.08);border:0.5px solid var(--gold-border)">
+        <div style="font-size:12px;color:var(--gold-light);line-height:1.6">После оплаты пришли скриншот чека в Telegram — подтвержу заказ и свяжусь для деталей доставки.</div>
       </div>
     </div>`;
   showScreen('screen-cart');
