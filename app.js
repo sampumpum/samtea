@@ -24,6 +24,7 @@ const IMAGES = {
 20: ['shu_ivou_2008_1.jpeg'],
 };
 Object.assign(IMAGES, {"9": ["TG-6_1.jpg", "TG-6_2.jpg", "TG-6_3.jpg", "TG-6_4.jpg", "TG-6_5.jpg"], "15": ["DHP-100_1.jpg", "DHP-100_2.jpg", "DHP-100_3.jpg", "DHP-100_4.jpg", "DHP-100_5.jpg"], "100": ["HYJM-26_1.jpg", "HYJM-26_2.jpg", "HYJM-26_3.jpg", "HYJM-26_4.jpg", "HYJM-26_5.jpg"], "101": ["DHHS-26_1.jpg", "DHHS-26_2.jpg", "DHHS-26_3.jpg", "DHHS-26_4.jpg", "DHHS-26_5.jpg"], "102": ["LB-14_1.jpg", "LB-14_2.jpg", "LB-14_3.jpg", "LB-14_4.jpg", "LB-14_5.jpg"], "103": ["SJH-26_1.jpg", "SJH-26_2.jpg", "SJH-26_3.jpg", "SJH-26_4.jpg", "SJH-26_5.jpg"], "106": ["DHGS-26_1.jpg", "DHGS-26_2.jpg", "DHGS-26_3.jpg", "DHGS-26_4.jpg", "DHGS-26_5.jpg"], "107": ["HK-26_1.jpg", "HK-26_2.jpg", "HK-26_3.jpg", "HK-26_4.jpg", "HK-26_5.jpg"], "108": ["FZX-26_1.jpg", "FZX-26_2.jpg", "FZX-26_3.jpg", "FZX-26_4.jpg", "FZX-26_5.jpg"], "109": ["ZSXZ-26_1.jpg", "ZSXZ-26_2.jpg", "ZSXZ-26_3.jpg", "ZSXZ-26_4.jpg", "ZSXZ-26_5.jpg"], "110": ["SP-26_1.jpg", "SP-26_2.jpg", "SP-26_3.jpg", "SP-26_4.jpg", "SP-26_5.jpg"], "111": ["JJM-26_1.jpg", "JJM-26_2.jpg", "JJM-26_3.jpg", "JJM-26_4.jpg", "JJM-26_5.jpg"], "112": ["DHJZ-26_1.jpg", "DHJZ-26_2.jpg", "DHJZ-26_3.jpg", "DHJZ-26_4.jpg", "DHJZ-26_5.jpg"], "113": ["GYX-26_1.jpg", "GYX-26_2.jpg", "GYX-26_3.jpg", "GYX-26_4.jpg", "GYX-26_5.jpg"], "115": ["YSX-26_1.jpg", "YSX-26_2.jpg", "YSX-26_3.jpg", "YSX-26_4.jpg", "YSX-26_5.jpg"], "116": ["DGYH-26_1.jpg", "DGYH-26_2.jpg", "DGYH-26_3.jpg", "DGYH-26_4.jpg", "DGYH-26_5.jpg"], "117": ["XSYH-26_1.jpg", "XSYH-26_2.jpg", "XSYH-26_3.jpg", "XSYH-26_4.jpg", "XSYH-26_5.jpg"], "118": ["JMD-25_1.jpg", "JMD-25_2.jpg", "JMD-25_3.jpg", "JMD-25_4.jpg", "JMD-25_5.jpg"], "119": ["MLH-26_1.jpg", "MLH-26_2.jpg", "MLH-26_3.jpg", "MLH-26_4.jpg", "MLH-26_5.jpg"], "120": ["HGY-26_1.jpg", "HGY-26_2.jpg", "HGY-26_3.jpg", "HGY-26_4.jpg", "HGY-26_5.jpg"], "121": ["GYJM-26_1.jpg", "GYJM-26_2.jpg", "GYJM-26_3.jpg", "GYJM-26_4.jpg", "GYJM-26_5.jpg"], "122": ["QH-26_1.jpg", "QH-26_2.jpg", "QH-26_3.jpg", "QH-26_4.jpg", "QH-26_5.jpg"], "200": ["TRM-16CH_1.jpg", "TRM-16CH_2.jpg", "TRM-16CH_3.jpg", "TRM-16CH_4.jpg", "TRM-16CH_5.jpg"], "201": ["TRM-16SE_1.jpg", "TRM-16SE_2.jpg", "TRM-16SE_3.jpg", "TRM-16SE_4.jpg", "TRM-16SE_5.jpg"], "202": ["TRM-16SR_1.jpg", "TRM-16SR_2.jpg", "TRM-16SR_3.jpg", "TRM-16SR_4.jpg"], "203": ["TRM-640_1.jpg", "TRM-640_2.jpg", "TRM-640_3.jpg", "TRM-640_4.jpg", "TRM-640_5.jpg"], "211": ["LJZ-6_1.jpg", "LJZ-6_2.jpg", "LJZ-6_3.jpg", "LJZ-6_4.jpg"], "212": ["KLB-01_1.jpg", "KLB-01_2.jpg"], "213": ["ZNL-26_1.jpg", "ZNL-26_2.jpg", "ZNL-26_3.jpg", "ZNL-26_4.jpg", "ZNL-26_5.jpg"], "214": ["SPN-26_1.jpg", "SPN-26_2.jpg", "SPN-26_3.jpg", "SPN-26_4.jpg", "SPN-26_5.jpg"], "215": ["FIG-01_1.jpg", "FIG-01_2.jpg", "FIG-01_3.jpg", "FIG-01_4.jpg", "FIG-01_5.jpg"]});
+Object.assign(IMAGES, {"1": ["LCT-9_1.jpg", "LCT-9_2.jpg"], "2": ["SHU-BL_1.jpg", "SHU-BL_2.jpg", "SHU-BL_3.jpg", "SHU-BL_4.jpg"], "3": ["DHJL-6_1.jpg", "DHJL-6_2.jpg", "DHJL-6_3.jpg"], "4": ["DJZ-8_1.jpg", "DJZ-8_2.jpg", "DJZ-8_3.jpg", "DJZ-8_4.jpg", "DJZ-8_5.jpg"], "5": ["GSY-6_1.jpg", "GSY-6_2.jpg", "GSY-6_3.jpg"], "6": ["MLS-5_1.jpg", "MLS-5_2.jpg"], "7": ["BRX-5_1.jpg", "BRX-5_2.jpg", "BRX-5_3.jpg"], "8": ["RG-7_1.jpg", "RG-7_2.jpg", "RG-7_3.jpg"], "10": ["JX-100_1.jpg", "JX-100_2.jpg", "JX-100_3.jpg"], "11": ["GAB-KING_1.jpg", "GAB-KING_2.jpg", "GAB-KING_3.jpg"], "12": ["GAB-RC_1.jpg", "GAB-RC_2.jpg", "GAB-RC_3.jpg", "GAB-RC_4.jpg"], "13": ["MBL-4_1.jpg", "MBL-4_2.jpg", "MBL-4_3.jpg", "MBL-4_4.jpg"], "14": ["BLC-15_1.jpg", "BLC-15_2.jpg", "BLC-15_3.jpg", "BLC-15_4.jpg", "BLC-15_5.jpg"]});
 
 function getImg(id) {
 const list = IMAGES[id];
@@ -193,12 +194,13 @@ const el = document.getElementById('screen-detail');
 const isWB = t.status === 'wb';
 const imgs = getAllImgs(t.id);
 window._currentSize = t.sizes ? t.sizes[t.sizes.length > 1 ? 1 : 0] : null;
+window._galIdx = 0;
 
 function heroHtml() {
 if (!imgs.length) return `<div class="detail-hero">${t.emoji}</div>`;
-if (imgs.length === 1) return `<div class="detail-hero" style="padding:0;overflow:hidden"><img src="${imgs[0]}" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display='none'" loading="lazy"></div>`;
+if (imgs.length === 1) return `<div class="detail-hero" style="padding:0;overflow:hidden"><img src="${imgs[0]}" onclick="openLightbox(0)" style="width:100%;height:100%;object-fit:contain;cursor:zoom-in" onerror="this.style.display='none'" loading="lazy"></div>`;
 return `<div class="detail-hero" style="padding:0;overflow:hidden;position:relative">
-<img id="gallery-img" src="${imgs[0]}" style="width:100%;height:100%;object-fit:contain" loading="lazy">
+<img id="gallery-img" src="${imgs[0]}" onclick="openLightbox(window._galIdx||0)" style="width:100%;height:100%;object-fit:contain;cursor:zoom-in" loading="lazy">
 <div style="position:absolute;bottom:8px;right:10px;display:flex;gap:4px">
 ${imgs.map((_,i) => `<div onclick="showGalleryImg(${i})" id="gdot-${i}" style="width:6px;height:6px;border-radius:50%;cursor:pointer;background:${i===0?'#fff':'rgba(255,255,255,0.5)'}"></div>`).join('')}
 </div>
@@ -264,11 +266,53 @@ showScreen('screen-detail');
 
 function showGalleryImg(i) {
 const imgs = getAllImgs(currentTea?.id);
+window._galIdx = i;
 const el = document.getElementById('gallery-img');
 if (el && imgs[i]) el.src = imgs[i];
 document.querySelectorAll('[id^="gdot-"]').forEach((d,idx) => {
 d.style.background = idx===i ? '#fff' : 'rgba(255,255,255,0.5)';
 });
+}
+
+// ── LIGHTBOX (полноэкранный просмотр: листание + зум) ─────────────────────────
+function openLightbox(start) {
+const imgs = getAllImgs(currentTea?.id);
+if (!imgs.length) return;
+let idx = Math.min(Math.max(start || 0, 0), imgs.length - 1);
+let scale = 1, tx = 0, ty = 0, px = 0, py = 0, drag = false, pd = 0, ps = 1, dx0 = null;
+const multi = imgs.length > 1;
+const ov = document.createElement('div');
+ov.id = 'lightbox';
+ov.style.cssText = 'position:fixed;inset:0;background:#000;z-index:99999;display:flex;align-items:center;justify-content:center;overflow:hidden;touch-action:none';
+ov.innerHTML =
+'<img id="lb-img" src="' + imgs[idx] + '" style="max-width:100%;max-height:100%;object-fit:contain;transform-origin:center;transition:transform .12s">'
++ '<div id="lb-x" style="position:absolute;top:10px;right:14px;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer">✕</div>'
++ (multi ? '<div id="lb-p" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);width:42px;height:64px;background:rgba(255,255,255,.12);color:#fff;font-size:28px;display:flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer">‹</div><div id="lb-n" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);width:42px;height:64px;background:rgba(255,255,255,.12);color:#fff;font-size:28px;display:flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer">›</div><div id="lb-c" style="position:absolute;bottom:14px;left:0;right:0;text-align:center;color:#fff;font-size:13px;opacity:.8">' + (idx + 1) + ' / ' + imgs.length + '</div>' : '');
+document.body.appendChild(ov);
+const img = ov.querySelector('#lb-img');
+const apply = () => { img.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + scale + ')'; };
+const reset = () => { scale = 1; tx = 0; ty = 0; apply(); };
+const go = (n) => { idx = (n + imgs.length) % imgs.length; img.src = imgs[idx]; reset(); const c = ov.querySelector('#lb-c'); if (c) c.textContent = (idx + 1) + ' / ' + imgs.length; };
+const close = () => { if (ov.parentNode) ov.parentNode.removeChild(ov); };
+ov.querySelector('#lb-x').onclick = close;
+ov.addEventListener('click', (e) => { if (e.target === ov && scale === 1) close(); });
+if (multi) { ov.querySelector('#lb-p').onclick = (e) => { e.stopPropagation(); go(idx - 1); }; ov.querySelector('#lb-n').onclick = (e) => { e.stopPropagation(); go(idx + 1); }; }
+img.addEventListener('dblclick', () => { if (scale > 1) reset(); else { scale = 2.5; apply(); } });
+const D = (t) => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+img.addEventListener('touchstart', (e) => {
+if (e.touches.length === 2) { pd = D(e.touches); ps = scale; }
+else { const now = Date.now(); if (now - (img._lt || 0) < 300) { if (scale > 1) reset(); else { scale = 2.5; apply(); } } img._lt = now; drag = true; px = e.touches[0].clientX - tx; py = e.touches[0].clientY - ty; dx0 = e.touches[0].clientX; }
+}, { passive: true });
+img.addEventListener('touchmove', (e) => {
+if (e.touches.length === 2) { scale = Math.min(4, Math.max(1, ps * D(e.touches) / pd)); apply(); }
+else if (drag && scale > 1) { tx = e.touches[0].clientX - px; ty = e.touches[0].clientY - py; apply(); }
+}, { passive: true });
+img.addEventListener('touchend', (e) => {
+drag = false;
+if (scale === 1 && multi && dx0 !== null && e.changedTouches.length) { const dd = e.changedTouches[0].clientX - dx0; if (dd > 50) go(idx - 1); else if (dd < -50) go(idx + 1); }
+dx0 = null;
+});
+apply();
 }
 
 function selectSize(g, price) {
