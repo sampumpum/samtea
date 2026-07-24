@@ -23,6 +23,7 @@ const IMAGES = {
 15: ['da_hun_pao_1.jpeg'],
 20: ['shu_ivou_2008_1.jpeg'],
 };
+Object.assign(IMAGES, {"9": ["TG-6_1.jpg", "TG-6_2.jpg", "TG-6_3.jpg", "TG-6_4.jpg", "TG-6_5.jpg"], "15": ["DHP-100_1.jpg", "DHP-100_2.jpg", "DHP-100_3.jpg", "DHP-100_4.jpg", "DHP-100_5.jpg"], "100": ["HYJM-26_1.jpg", "HYJM-26_2.jpg", "HYJM-26_3.jpg", "HYJM-26_4.jpg", "HYJM-26_5.jpg"], "101": ["DHHS-26_1.jpg", "DHHS-26_2.jpg", "DHHS-26_3.jpg", "DHHS-26_4.jpg", "DHHS-26_5.jpg"], "102": ["LB-14_1.jpg", "LB-14_2.jpg", "LB-14_3.jpg", "LB-14_4.jpg", "LB-14_5.jpg"], "103": ["SJH-26_1.jpg", "SJH-26_2.jpg", "SJH-26_3.jpg", "SJH-26_4.jpg", "SJH-26_5.jpg"], "106": ["DHGS-26_1.jpg", "DHGS-26_2.jpg", "DHGS-26_3.jpg", "DHGS-26_4.jpg", "DHGS-26_5.jpg"], "107": ["HK-26_1.jpg", "HK-26_2.jpg", "HK-26_3.jpg", "HK-26_4.jpg", "HK-26_5.jpg"], "108": ["FZX-26_1.jpg", "FZX-26_2.jpg", "FZX-26_3.jpg", "FZX-26_4.jpg", "FZX-26_5.jpg"], "109": ["ZSXZ-26_1.jpg", "ZSXZ-26_2.jpg", "ZSXZ-26_3.jpg", "ZSXZ-26_4.jpg", "ZSXZ-26_5.jpg"], "110": ["SP-26_1.jpg", "SP-26_2.jpg", "SP-26_3.jpg", "SP-26_4.jpg", "SP-26_5.jpg"], "111": ["JJM-26_1.jpg", "JJM-26_2.jpg", "JJM-26_3.jpg", "JJM-26_4.jpg", "JJM-26_5.jpg"], "112": ["DHJZ-26_1.jpg", "DHJZ-26_2.jpg", "DHJZ-26_3.jpg", "DHJZ-26_4.jpg", "DHJZ-26_5.jpg"], "113": ["GYX-26_1.jpg", "GYX-26_2.jpg", "GYX-26_3.jpg", "GYX-26_4.jpg", "GYX-26_5.jpg"], "115": ["YSX-26_1.jpg", "YSX-26_2.jpg", "YSX-26_3.jpg", "YSX-26_4.jpg", "YSX-26_5.jpg"], "116": ["DGYH-26_1.jpg", "DGYH-26_2.jpg", "DGYH-26_3.jpg", "DGYH-26_4.jpg", "DGYH-26_5.jpg"], "117": ["XSYH-26_1.jpg", "XSYH-26_2.jpg", "XSYH-26_3.jpg", "XSYH-26_4.jpg", "XSYH-26_5.jpg"], "118": ["JMD-25_1.jpg", "JMD-25_2.jpg", "JMD-25_3.jpg", "JMD-25_4.jpg", "JMD-25_5.jpg"], "119": ["MLH-26_1.jpg", "MLH-26_2.jpg", "MLH-26_3.jpg", "MLH-26_4.jpg", "MLH-26_5.jpg"], "120": ["HGY-26_1.jpg", "HGY-26_2.jpg", "HGY-26_3.jpg", "HGY-26_4.jpg", "HGY-26_5.jpg"], "121": ["GYJM-26_1.jpg", "GYJM-26_2.jpg", "GYJM-26_3.jpg", "GYJM-26_4.jpg", "GYJM-26_5.jpg"], "122": ["QH-26_1.jpg", "QH-26_2.jpg", "QH-26_3.jpg", "QH-26_4.jpg", "QH-26_5.jpg"], "200": ["TRM-16CH_1.jpg", "TRM-16CH_2.jpg", "TRM-16CH_3.jpg", "TRM-16CH_4.jpg", "TRM-16CH_5.jpg"], "201": ["TRM-16SE_1.jpg", "TRM-16SE_2.jpg", "TRM-16SE_3.jpg", "TRM-16SE_4.jpg", "TRM-16SE_5.jpg"], "202": ["TRM-16SR_1.jpg", "TRM-16SR_2.jpg", "TRM-16SR_3.jpg", "TRM-16SR_4.jpg"], "203": ["TRM-640_1.jpg", "TRM-640_2.jpg", "TRM-640_3.jpg", "TRM-640_4.jpg", "TRM-640_5.jpg"], "211": ["LJZ-6_1.jpg", "LJZ-6_2.jpg", "LJZ-6_3.jpg", "LJZ-6_4.jpg"], "212": ["KLB-01_1.jpg", "KLB-01_2.jpg"], "213": ["ZNL-26_1.jpg", "ZNL-26_2.jpg", "ZNL-26_3.jpg", "ZNL-26_4.jpg", "ZNL-26_5.jpg"], "214": ["SPN-26_1.jpg", "SPN-26_2.jpg", "SPN-26_3.jpg", "SPN-26_4.jpg", "SPN-26_5.jpg"], "215": ["FIG-01_1.jpg", "FIG-01_2.jpg", "FIG-01_3.jpg", "FIG-01_4.jpg", "FIG-01_5.jpg"]});
 
 function getImg(id) {
 const list = IMAGES[id];
@@ -109,9 +110,9 @@ document.getElementById('app').innerHTML = `
 <div class="section-label">Каталог</div>
 <div class="cats" id="cat-pills">
 ${[
-['all','Все'], ['shu','Шу пуэр'], ['red','Красный'],
-['ulung','Улун'], ['gaba','ГАБА'], ['green','Зелёный'],
-['white','Белый'], ['exclusive','💎 Эксклюзив']
+['all','Все'], ['red','Красный'], ['ulung','Улун'], ['shu','Шу пуэр'],
+['sheng','Шэн'], ['gaba','ГАБА'], ['green','Зелёный'], ['white','Белый'],
+['heicha','Хэйча'], ['posuda','Посуда'], ['exclusive','💎 Эксклюзив']
 ].map(([c,l]) => `<div class="cat-pill${currentCat===c?' active':''}" onclick="filterCat('${c}',this)">${l}</div>`).join('')}
 </div>
 <div class="tea-list" id="tea-list"></div>
@@ -136,10 +137,10 @@ return `
 
 function renderNav(active) {
 const items = [
-['screen-main', 'ti-home', 'Главная', "renderMain(); showScreen('screen-main')"],
-['screen-mood', 'ti-mood-happy', 'Подбор', "renderMood(); showScreen('screen-mood')"],
-['screen-search', 'ti-search', 'Поиск', "renderSearch(); showScreen('screen-search')"],
-['screen-cart', 'ti-shopping-bag', 'Корзина', "renderCart(); showScreen('screen-cart')", 'cart-nav-btn'],
+['screen-main', 'ti-home', 'Главная', 'renderMain(); showScreen(\'screen-main\')'],
+['screen-mood', 'ti-mood-happy', 'Подбор', 'renderMood(); showScreen(\'screen-mood\')'],
+['screen-search', 'ti-search', 'Поиск', 'renderSearch(); showScreen(\'screen-search\')'],
+['screen-cart', 'ti-shopping-bag', 'Корзина', 'renderCart(); showScreen(\'screen-cart\')', 'cart-nav-btn'],
 ];
 return `<div class="bottom-nav">${items.map((item, i) =>
 `<button class="nav-item${i===active?' active':''}" onclick="${item[3]}"><i class="ti ${item[1]}"></i>${item[4]?`<span id="${item[4]}">${i===3&&cart.length>0?`Корзина (${cart.length})`:'Корзина'}</span>`:item[2]}</button>`
@@ -170,6 +171,7 @@ ${t.exclusive ? '<span class="tag" style="color:#c8891a;border-color:rgba(200,13
 <div class="tea-right">
 <div class="tea-price">${t.price} ₽</div>
 <div class="tea-weight">${t.weight}</div>
+${t.art?`<div style="font-size:10px;color:var(--text3);margin-top:2px">${t.art}</div>`:''}
 </div>
 </div>`}).join('') || '<div style="color:var(--text3);padding:20px;text-align:center;font-size:13px">Скоро появятся</div>';
 }
@@ -228,7 +230,7 @@ el.innerHTML = `
 ${heroHtml()}
 <div class="detail-scroll">
 <div class="detail-name">${t.name}</div>
-<div class="detail-cn">${t.subtitle} · ${t.cn}</div>
+<div class="detail-cn">${t.subtitle}${t.cn?' · '+t.cn:''}</div>
 <div class="price-row">
 <div class="detail-price" id="cur-price">${initPrice} ₽</div>
 <div class="detail-weight">${initG ? initG+'г' : t.weight}</div>
@@ -237,18 +239,19 @@ ${heroHtml()}
 <div class="dot ${isWB?'dot-blue':'dot-green'}"></div>
 <div class="status-text">${isWB?'Доступен на Wildberries':'Есть в наличии'}</div>
 </div>
+${t.art?`<div style="font-size:11px;color:var(--text3);letter-spacing:0.03em;margin-bottom:12px">Артикул: <span style="color:var(--text2)">${t.art}</span></div>`:''}
 ${t.exclusive?`<div style="background:rgba(200,137,26,0.1);border:0.5px solid rgba(200,137,26,0.3);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:14px;font-size:12px;color:var(--gold-light)">💎 Эксклюзив — редкий лот из личной коллекции</div>`:''}
 <div class="quote-block">${t.quote}</div>
 <div id="sizes-wrap">${sizesHtml(initG)}</div>
-<div class="brew-label">Как заваривать</div>
+${t.brew?`<div class="brew-label">Как заваривать</div>
 <div class="brew-grid">
 <div class="brew-cell"><div class="brew-val">${t.brew.g}</div><div class="brew-key">на 150мл</div></div>
 <div class="brew-cell"><div class="brew-val">${t.brew.t}</div><div class="brew-key">вода</div></div>
 <div class="brew-cell"><div class="brew-val">${t.brew.s}</div><div class="brew-key">1й пролив</div></div>
 <div class="brew-cell"><div class="brew-val">${t.brew.prolivs}</div><div class="brew-key">проливов</div></div>
-</div>
+</div>`:''}
 ${t.coldBrew?`<div class="cold-brew-badge"><i class="ti ti-snowflake"></i>Подходит для холодного заваривания (6ч в холодильнике)</div>`:''}
-<div class="detail-tags">${t.tags.map(tg=>`<span class="detail-tag">${tg}</span>`).join('')}</div>
+<div class="detail-tags">${(t.tags||[]).map(tg=>`<span class="detail-tag">${tg}</span>`).join('')}</div>
 ${t.desc?`<div style="font-size:13px;color:var(--text2);line-height:1.65;margin-top:14px">${t.desc}</div>`:''}
 </div>
 <div class="action-bar">
@@ -344,10 +347,16 @@ if (cart.length === 0) return;
 const total = cart.reduce((s,i) => s + i.price, 0);
 const items = cart.map(i => `• ${i.name} ${i.weight} — ${i.price} ₽`).join('\n');
 const el = document.getElementById('screen-cart');
+
+// Реквизиты — хардкод
 const PHONE = '+79853422921';
 const BANK = 'Сбер / Т-Банк / ВТБ';
 const TG = 'samtruesam';
+
+// QR-код — просто показываем номер телефона для СБП
+// (НСПК QR требует регистрации, используем текстовый вариант)
 const orderText = encodeURIComponent('Привет! Хочу заказать:\n' + items + '\n\nИтого: ' + total + ' ₽');
+
 el.innerHTML = `
 <div class="header">
 <button class="back-btn" onclick="renderCart()"><i class="ti ti-arrow-left"></i> Назад</button>
@@ -358,6 +367,7 @@ el.innerHTML = `
 <div style="font-size:32px;font-weight:500;color:var(--text);margin-bottom:4px">${total} ₽</div>
 <div style="font-size:13px;color:var(--text3)">${cart.length} позиц${cart.length===1?'ия':cart.length<5?'ии':'ий'}</div>
 </div>
+
 <div style="background:var(--surface);border:0.5px solid var(--gold-border);border-radius:var(--radius);padding:20px;text-align:center;margin-bottom:14px">
 <div style="font-size:11px;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:14px">Оплата по СБП</div>
 <div style="font-size:28px;font-weight:500;color:var(--text);letter-spacing:0.05em;margin-bottom:6px">+7 985 342-29-21</div>
@@ -367,6 +377,7 @@ el.innerHTML = `
 <div style="font-size:12px;color:var(--text3);line-height:1.6">Открой приложение банка → Переводы → По номеру телефона → введи номер выше → укажи сумму <strong style="color:var(--text)">${total} ₽</strong></div>
 </div>
 </div>
+
 <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:14px">
 <div style="font-size:11px;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px">Или наличными при встрече</div>
 <div style="font-size:13px;color:var(--text2);margin-bottom:12px">Напиши Сэму — договоримся о доставке по Москве или самовывозе</div>
@@ -375,10 +386,12 @@ style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%
 ✈️ Написать Сэму в Telegram
 </a>
 </div>
+
 <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:14px">
 <div style="font-size:11px;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px">Доставка</div>
 <div style="font-size:13px;color:var(--text2);line-height:1.8">🚗 Курьер по Москве — договорная<br>📦 СДЭК по России — от 300 ₽<br>🤝 Самовывоз — бесплатно</div>
 </div>
+
 <div style="padding:12px;border-radius:var(--radius-sm);background:rgba(200,137,26,0.08);border:0.5px solid var(--gold-border)">
 <div style="font-size:12px;color:var(--gold-light);line-height:1.6">После оплаты пришли скриншот чека в Telegram — подтвержу заказ и свяжусь для деталей доставки.</div>
 </div>
@@ -389,26 +402,38 @@ showScreen('screen-cart');
 // ── MOOD FLOW ─────────────────────────────────────────────────────────────────
 
 const MOOD_FLOW = {
-start: { q: 'Какая сейчас погода?', opts: [
+start: {
+q: 'Какая сейчас погода?',
+opts: [
 { icon: '🥶', text: 'Холодно', sub: 'Хочется согреться', next: 'cold' },
 { icon: '😊', text: 'Тепло и комфортно', sub: 'Обычный день', next: 'warm' },
 { icon: '🌞', text: 'Жарко', sub: 'Хочется освежиться', next: 'hot' },
-]},
-cold: { q: 'Что хочется сейчас?', opts: [
+]
+},
+cold: {
+q: 'Что хочется сейчас?',
+opts: [
 { icon: '⚡', text: 'Взбодриться', sub: 'Зарядиться энергией', result: [2, 1] },
 { icon: '🧘', text: 'Расслабиться', sub: 'Отдохнуть после дня', result: [1, 11] },
 { icon: '🍫', text: 'Что-то тёмное, глубокое', sub: 'Насыщенный вкус', result: [2, 1] },
-]},
-warm: { q: 'Какой вкус сегодня?', opts: [
+]
+},
+warm: {
+q: 'Какой вкус сегодня?',
+opts: [
 { icon: '🌸', text: 'Цветочное, нежное', sub: 'Лёгкость и аромат', result: [9, 6] },
 { icon: '🪨', text: 'Глубокое, минеральное', sub: 'Характерный вкус', result: [7, 8] },
 { icon: '🌅', text: 'Медовое, сладкое', sub: 'Тёплый уют', result: [3, 4] },
-]},
-hot: { q: 'Как будешь пить?', opts: [
+]
+},
+hot: {
+q: 'Как будешь пить?',
+opts: [
 { icon: '🧊', text: 'Холодное заваривание', sub: 'В холодильник на ночь', result: [13, 9] },
 { icon: '🌿', text: 'Горячий, но лёгкий', sub: 'Не тяжёлый', result: [13, 10] },
 { icon: '✨', text: 'Попробовать что-то новое', sub: 'Удиви меня', result: [11, 5] },
-]},
+]
+},
 };
 
 function renderMood(step = 'start') {
