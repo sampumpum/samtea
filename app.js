@@ -274,45 +274,68 @@ d.style.background = idx===i ? '#fff' : 'rgba(255,255,255,0.5)';
 });
 }
 
-// ── LIGHTBOX (полноэкранный просмотр: листание + зум) ─────────────────────────
+// ── LIGHTBOX (полноэкранный просмотр: свайп + зум, как в Instagram) ────────────
 function openLightbox(start) {
 const imgs = getAllImgs(currentTea?.id);
 if (!imgs.length) return;
 let idx = Math.min(Math.max(start || 0, 0), imgs.length - 1);
-let scale = 1, tx = 0, ty = 0, px = 0, py = 0, drag = false, pd = 0, ps = 1, dx0 = null;
+let scale = 1, ox = 0, oy = 0, px = 0, py = 0, pd = 0, ps = 1;
+let sx = 0, sy = 0, axis = null, anim = false;
 const multi = imgs.length > 1;
 const ov = document.createElement('div');
 ov.id = 'lightbox';
 ov.style.cssText = 'position:fixed;inset:0;background:#000;z-index:99999;display:flex;align-items:center;justify-content:center;overflow:hidden;touch-action:none';
 ov.innerHTML =
-'<img id="lb-img" src="' + imgs[idx] + '" style="max-width:100%;max-height:100%;object-fit:contain;transform-origin:center;transition:transform .12s">'
-+ '<div id="lb-x" style="position:absolute;top:10px;right:14px;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer">✕</div>'
-+ (multi ? '<div id="lb-p" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);width:42px;height:64px;background:rgba(255,255,255,.12);color:#fff;font-size:28px;display:flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer">‹</div><div id="lb-n" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);width:42px;height:64px;background:rgba(255,255,255,.12);color:#fff;font-size:28px;display:flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer">›</div><div id="lb-c" style="position:absolute;bottom:14px;left:0;right:0;text-align:center;color:#fff;font-size:13px;opacity:.8">' + (idx + 1) + ' / ' + imgs.length + '</div>' : '');
+'<img id="lb-img" src="' + imgs[idx] + '" draggable="false" style="max-width:100%;max-height:100%;object-fit:contain;transform-origin:center;will-change:transform">'
++ '<div id="lb-back" style="position:absolute;top:12px;left:12px;display:flex;align-items:center;gap:5px;padding:8px 14px 8px 11px;border-radius:20px;background:rgba(0,0,0,.5);color:#fff;font-size:15px;cursor:pointer"><i class="ti ti-arrow-left" style="font-size:18px"></i>Назад</div>'
++ (multi ? '<div id="lb-p" style="position:absolute;left:6px;top:50%;transform:translateY(-50%);width:38px;height:56px;background:rgba(255,255,255,.10);color:#fff;font-size:26px;display:flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer">‹</div><div id="lb-n" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);width:38px;height:56px;background:rgba(255,255,255,.10);color:#fff;font-size:26px;display:flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer">›</div><div id="lb-c" style="position:absolute;bottom:16px;left:0;right:0;text-align:center;color:#fff;font-size:13px;opacity:.85">' + (idx + 1) + ' / ' + imgs.length + '</div>' : '');
 document.body.appendChild(ov);
 const img = ov.querySelector('#lb-img');
-const apply = () => { img.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + scale + ')'; };
-const reset = () => { scale = 1; tx = 0; ty = 0; apply(); };
-const go = (n) => { idx = (n + imgs.length) % imgs.length; img.src = imgs[idx]; reset(); const c = ov.querySelector('#lb-c'); if (c) c.textContent = (idx + 1) + ' / ' + imgs.length; };
+const draw = (a) => { img.style.transition = a ? 'transform .18s ease-out' : 'none'; img.style.transform = 'translate(' + ox + 'px,' + oy + 'px) scale(' + scale + ')'; };
+const reset = () => { scale = 1; ox = 0; oy = 0; draw(true); };
+const count = () => { const c = ov.querySelector('#lb-c'); if (c) c.textContent = (idx + 1) + ' / ' + imgs.length; };
 const close = () => { if (ov.parentNode) ov.parentNode.removeChild(ov); };
-ov.querySelector('#lb-x').onclick = close;
-ov.addEventListener('click', (e) => { if (e.target === ov && scale === 1) close(); });
-if (multi) { ov.querySelector('#lb-p').onclick = (e) => { e.stopPropagation(); go(idx - 1); }; ov.querySelector('#lb-n').onclick = (e) => { e.stopPropagation(); go(idx + 1); }; }
-img.addEventListener('dblclick', () => { if (scale > 1) reset(); else { scale = 2.5; apply(); } });
+const slide = (dir) => {
+if (anim || !multi) return; anim = true;
+img.style.transition = 'transform .15s ease-in'; img.style.transform = 'translateX(' + (dir > 0 ? '-110%' : '110%') + ')';
+setTimeout(() => {
+idx = (idx + dir + imgs.length) % imgs.length; img.src = imgs[idx]; count(); scale = 1; ox = 0; oy = 0;
+img.style.transition = 'none'; img.style.transform = 'translateX(' + (dir > 0 ? '110%' : '-110%') + ')';
+void img.offsetWidth;
+img.style.transition = 'transform .15s ease-out'; img.style.transform = 'translateX(0)'; anim = false;
+}, 150);
+};
+ov.querySelector('#lb-back').onclick = close;
+if (multi) { ov.querySelector('#lb-p').onclick = () => slide(-1); ov.querySelector('#lb-n').onclick = () => slide(1); }
 const D = (t) => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+img.addEventListener('dblclick', () => { if (scale > 1) reset(); else { scale = 2.5; draw(true); } });
 img.addEventListener('touchstart', (e) => {
-if (e.touches.length === 2) { pd = D(e.touches); ps = scale; }
-else { const now = Date.now(); if (now - (img._lt || 0) < 300) { if (scale > 1) reset(); else { scale = 2.5; apply(); } } img._lt = now; drag = true; px = e.touches[0].clientX - tx; py = e.touches[0].clientY - ty; dx0 = e.touches[0].clientX; }
+if (anim) return;
+if (e.touches.length === 2) { pd = D(e.touches); ps = scale; axis = 'zoom'; return; }
+const now = Date.now();
+if (now - (img._lt || 0) < 300) { if (scale > 1) reset(); else { scale = 2.5; draw(true); } }
+img._lt = now; sx = e.touches[0].clientX; sy = e.touches[0].clientY; px = ox; py = oy; axis = null;
 }, { passive: true });
 img.addEventListener('touchmove', (e) => {
-if (e.touches.length === 2) { scale = Math.min(4, Math.max(1, ps * D(e.touches) / pd)); apply(); }
-else if (drag && scale > 1) { tx = e.touches[0].clientX - px; ty = e.touches[0].clientY - py; apply(); }
+if (anim) return;
+if (e.touches.length === 2) { scale = Math.min(4, Math.max(1, ps * D(e.touches) / pd)); draw(false); return; }
+const dx = e.touches[0].clientX - sx, dy = e.touches[0].clientY - sy;
+if (scale > 1) { ox = px + dx; oy = py + dy; draw(false); return; }
+if (!axis && (Math.abs(dx) > 8 || Math.abs(dy) > 8)) axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+if (axis === 'x') { img.style.transition = 'none'; img.style.transform = 'translateX(' + dx + 'px)'; }
+else if (axis === 'y' && dy > 0) { img.style.transition = 'none'; img.style.transform = 'translateY(' + dy + 'px)'; ov.style.background = 'rgba(0,0,0,' + (1 - Math.min(dy / 450, 0.7)) + ')'; }
 }, { passive: true });
 img.addEventListener('touchend', (e) => {
-drag = false;
-if (scale === 1 && multi && dx0 !== null && e.changedTouches.length) { const dd = e.changedTouches[0].clientX - dx0; if (dd > 50) go(idx - 1); else if (dd < -50) go(idx + 1); }
-dx0 = null;
+if (anim || scale > 1) return;
+const ct = e.changedTouches[0] || { clientX: sx, clientY: sy };
+const dx = ct.clientX - sx, dy = ct.clientY - sy;
+ov.style.background = '#000';
+if (axis === 'y' && dy > 120) { close(); return; }
+if (axis === 'x' && dx <= -55) { slide(1); return; }
+if (axis === 'x' && dx >= 55) { slide(-1); return; }
+img.style.transition = 'transform .18s ease-out'; img.style.transform = 'translate(0,0) scale(1)';
 });
-apply();
+draw(false);
 }
 
 function selectSize(g, price) {
