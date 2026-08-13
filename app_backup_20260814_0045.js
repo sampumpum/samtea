@@ -414,128 +414,59 @@ ${cart.length === 0
 `;
 }
 
-// ── ОФОРМЛЕНИЕ ────────────────────────────────────────────────────────────────
-
-const SHIP = { cost: 420, free: 5000, pickup: 'Москва, Новокосино' };
-const TG_USER = 'samtruesam';
-
-let order = { method: 'cdek', name: '', phone: '', city: '', address: '' };
-
-function goodsTotal() { return cart.reduce((s, i) => s + i.price, 0); }
-
-function shipCost() {
-if (order.method === 'pickup') return 0;
-return goodsTotal() >= SHIP.free ? 0 : SHIP.cost;
-}
-
-function setMethod(m) { order.method = m; checkout(); }
-
-function setField(k, v) { order[k] = v; updateTotals(); }
-
-function updateTotals() {
-const g = goodsTotal(), s = shipCost();
-const set = (id, txt) => { const e = document.getElementById(id); if (e) e.textContent = txt; };
-set('sum-goods', g + ' ₽');
-set('sum-ship', order.method === 'pickup' ? '0 ₽' : (s === 0 ? 'бесплатно' : s + ' ₽'));
-set('sum-ship-label', order.method === 'pickup' ? 'Самовывоз' : 'Доставка СДЭК');
-set('sum-grand', (g + s) + ' ₽');
-}
-
-function orderText() {
-const g = goodsTotal(), s = shipCost();
-const lines = ['Заказ SAM TEA', ''];
-cart.forEach(i => lines.push(`• ${i.name} ${i.weight} — ${i.price} ₽`));
-lines.push('', `Товары: ${g} ₽`);
-if (order.method === 'pickup') {
-lines.push('Самовывоз: ' + SHIP.pickup);
-} else {
-lines.push('Доставка СДЭК: ' + (s === 0 ? 'бесплатно' : s + ' ₽'));
-}
-lines.push(`Итого: ${g + s} ₽`, '');
-if (order.method === 'pickup') {
-lines.push('Получение: самовывоз, ' + SHIP.pickup);
-if (order.name.trim() || order.phone.trim()) lines.push([order.name.trim(), order.phone.trim()].filter(Boolean).join(', '));
-} else {
-const who = [order.name.trim(), order.phone.trim()].filter(Boolean).join(', ');
-const where = [order.city.trim(), order.address.trim()].filter(Boolean).join(', ');
-lines.push(who || 'Имя и телефон не указаны');
-lines.push(where || 'Адрес не указан — напишу отдельно');
-}
-return lines.join('\n');
-}
-
-function sendOrder() {
-const url = 'https://t.me/' + TG_USER + '?text=' + encodeURIComponent(orderText());
-if (tg && tg.openTelegramLink) tg.openTelegramLink(url); else window.open(url, '_blank');
-}
-
 function checkout() {
 if (cart.length === 0) return;
+const total = cart.reduce((s,i) => s + i.price, 0);
+const items = cart.map(i => `• ${i.name} ${i.weight} — ${i.price} ₽`).join('\n');
 const el = document.getElementById('screen-cart');
-const g = goodsTotal(), s = shipCost();
-const isPickup = order.method === 'pickup';
 
-const opt = (m, icon, title, sub) => {
-const on = order.method === m;
-return `<div onclick="setMethod('${m}')" style="display:flex;gap:10px;align-items:flex-start;padding:12px 14px;margin-bottom:8px;cursor:pointer;
-border-radius:var(--radius);border:0.5px solid ${on ? 'var(--gold)' : 'var(--border)'};background:${on ? 'rgba(200,137,26,0.1)' : 'transparent'}">
-<i class="ti ti-${icon}" style="font-size:19px;margin-top:1px;color:${on ? 'var(--gold)' : 'var(--text3)'}"></i>
-<div style="flex:1">
-<div style="font-size:14px;color:var(--text)">${title}</div>
-<div style="font-size:12px;color:var(--text3);margin-top:2px">${sub}</div>
-</div>
-<span style="width:16px;height:16px;border-radius:50%;flex-shrink:0;margin-top:2px;
-border:1px solid ${on ? 'var(--gold)' : 'var(--text3)'};background:${on ? 'var(--gold)' : 'transparent'}"></span>
-</div>`;
-};
+// Реквизиты — хардкод
+const PHONE = '+79853422921';
+const BANK = 'Сбер / Т-Банк / ВТБ';
+const TG = 'samtruesam';
 
-const field = (k, ph, type) => `<input type="${type || 'text'}" value="${(order[k] || '').replace(/"/g, '&quot;')}"
-placeholder="${ph}" oninput="setField('${k}',this.value)"
-style="width:100%;padding:11px 12px;margin-bottom:7px;font-size:13px;font-family:var(--font-sans);
-background:var(--surface);color:var(--text);border:0.5px solid var(--border);border-radius:var(--radius-sm);outline:none">`;
+// QR-код — просто показываем номер телефона для СБП
+// (НСПК QR требует регистрации, используем текстовый вариант)
+const orderText = encodeURIComponent('Привет! Хочу заказать:\n' + items + '\n\nИтого: ' + total + ' ₽');
 
 el.innerHTML = `
 <div class="header">
 <button class="back-btn" onclick="renderCart()"><i class="ti ti-arrow-left"></i> Назад</button>
-<div class="logo">Оформление</div>
+<div class="logo">Оплата</div>
 </div>
-<div style="flex:1;overflow-y:auto;padding:16px">
-
-<div style="background:var(--surface);border-radius:var(--radius);padding:12px 14px;margin-bottom:14px">
-${cart.map(i => `<div style="display:flex;justify-content:space-between;font-size:13px;color:var(--text2);padding:3px 0">
-<span>${i.name} · ${i.weight}</span><span style="color:var(--text)">${i.price} ₽</span></div>`).join('')}
-</div>
-
-<div class="brew-label">Как получить</div>
-${opt('cdek', 'truck', 'СДЭК по России', `До ${SHIP.free} ₽ — ${SHIP.cost} ₽, дальше бесплатно`)}
-${opt('pickup', 'map-pin', 'Самовывоз', SHIP.pickup + ' — бесплатно')}
-
-${isPickup ? '' : `<div style="margin-top:14px">
-<div class="brew-label">Куда везти</div>
-${field('name', 'Имя и фамилия')}
-${field('phone', 'Телефон', 'tel')}
-${field('city', 'Город')}
-${field('address', 'Адрес или номер пункта выдачи')}
-</div>`}
-
-<div style="border-top:0.5px solid var(--border);padding-top:12px;margin:14px 0">
-<div style="display:flex;justify-content:space-between;font-size:13px;color:var(--text2);padding:2px 0">
-<span>Товары</span><span id="sum-goods">${g} ₽</span></div>
-<div style="display:flex;justify-content:space-between;font-size:13px;color:var(--text2);padding:2px 0">
-<span id="sum-ship-label">${isPickup ? 'Самовывоз' : 'Доставка СДЭК'}</span>
-<span id="sum-ship">${isPickup ? '0 ₽' : (s === 0 ? 'бесплатно' : s + ' ₽')}</span></div>
-<div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:8px">
-<span style="font-size:14px;color:var(--text)">Итого</span>
-<span id="sum-grand" style="font-size:22px;color:var(--gold-light)">${g + s} ₽</span></div>
+<div style="flex:1;overflow-y:auto;padding:20px 16px">
+<div style="text-align:center;margin-bottom:20px">
+<div style="font-size:32px;font-weight:500;color:var(--text);margin-bottom:4px">${total} ₽</div>
+<div style="font-size:13px;color:var(--text3)">${cart.length} позиц${cart.length===1?'ия':cart.length<5?'ии':'ий'}</div>
 </div>
 
-<div style="background:rgba(200,137,26,0.08);border:0.5px solid var(--gold-border);border-radius:var(--radius-sm);
-padding:11px 12px;margin-bottom:14px;font-size:12px;color:var(--gold-light);line-height:1.55">
-Сэм проверит наличие, подтвердит заказ и пришлёт реквизиты для оплаты.</div>
-
+<div style="background:var(--surface);border:0.5px solid var(--gold-border);border-radius:var(--radius);padding:20px;text-align:center;margin-bottom:14px">
+<div style="font-size:11px;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:14px">Оплата по СБП</div>
+<div style="font-size:28px;font-weight:500;color:var(--text);letter-spacing:0.05em;margin-bottom:6px">+7 985 342-29-21</div>
+<div style="font-size:13px;color:var(--text2);margin-bottom:4px">${BANK}</div>
+<div style="font-size:12px;color:var(--text3);margin-top:8px">Получатель: Александр К.</div>
+<div style="margin-top:14px;padding:10px;background:var(--bg3);border-radius:var(--radius-sm)">
+<div style="font-size:12px;color:var(--text3);line-height:1.6">Открой приложение банка → Переводы → По номеру телефона → введи номер выше → укажи сумму <strong style="color:var(--text)">${total} ₽</strong></div>
 </div>
-<div class="action-bar">
-<button class="btn-primary" onclick="sendOrder()">Отправить заказ Сэму</button>
+</div>
+
+<div style="background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:14px">
+<div style="font-size:11px;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px">Или наличными при встрече</div>
+<div style="font-size:13px;color:var(--text2);margin-bottom:12px">Напиши Сэму — договоримся о доставке по Москве или самовывозе</div>
+<a href="https://t.me/${TG}?text=${orderText}" target="_blank"
+style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;background:var(--gold);color:var(--bg);border-radius:var(--radius);font-size:14px;font-weight:600;text-decoration:none;font-family:var(--font-sans)">
+✈️ Написать Сэму в Telegram
+</a>
+</div>
+
+<div style="background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:14px">
+<div style="font-size:11px;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px">Доставка</div>
+<div style="font-size:13px;color:var(--text2);line-height:1.8">🚗 Курьер по Москве — договорная<br>📦 СДЭК по России — от 300 ₽<br>🤝 Самовывоз — бесплатно</div>
+</div>
+
+<div style="padding:12px;border-radius:var(--radius-sm);background:rgba(200,137,26,0.08);border:0.5px solid var(--gold-border)">
+<div style="font-size:12px;color:var(--gold-light);line-height:1.6">После оплаты пришли скриншот чека в Telegram — подтвержу заказ и свяжусь для деталей доставки.</div>
+</div>
 </div>`;
 showScreen('screen-cart');
 }
