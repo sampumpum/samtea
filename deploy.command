@@ -10,9 +10,9 @@ if [ -f .git/index.lock ]; then rm -f .git/index.lock && echo "(убрал за�
 echo "Папка: $(pwd)"
 echo ""
 git add -A
-git commit -m "Полный каталог: 72 позиции, артикулы, фото, новые категории" || echo "(нечего коммитить — возможно уже закоммичено)"
+git commit -m "Синхронизация с мастер-прайсом 07.08.2026: остатки, распродажа, посуда, фото" || echo "(нечего коммитить — возможно уже закоммичено)"
 echo ""
-echo "Пушу на GitHub (может занять минуту — фото ~37 МБ)..."
+echo "Пушу на GitHub (может занять пару минут — фото ~67 МБ)..."
 git push origin main
 echo ""
 echo "Готово. Открой https://samtea.vercel.app через ~30 сек (или vercel.com/samtea — вкладка Deployments)."

@@ -32,16 +32,28 @@ function cleanTea(tea) {
   for (const [k, v] of Object.entries(tea)) {
     if (k.startsWith('_')) continue; // _admin, _comment и т.д.
     if (k === 'available') continue; // служебное поле
+    if (k === 'stock') {             // в бот отдаём только «осталось мало»
+      if (v && v.unit === 'шт' && typeof v.qty === 'number' && v.qty > 0 && v.qty <= 3) clean.left = v.qty;
+      continue;
+    }
     if (k === 'photos') continue;    // фото пока в отдельной папке, не в data.js
     clean[k] = v;
   }
   return clean;
 }
 
+// Нулевой остаток гасит позицию независимо от available
+const inStock = t => !t.stock || t.stock.qty === null || t.stock.qty === undefined || t.stock.qty > 0;
+
 // Фильтруем только доступные чаи
-const teas = inv.teas
-  .filter(t => t.id && t.available === true)
-  .map(cleanTea);
+const available = inv.teas.filter(t => t.id && t.available === true && inStock(t));
+const teas = available.map(cleanTea);
+
+// Карта фото: id → [файлы]. Единственный источник правды — inventory.json.
+const images = {};
+for (const t of available) {
+  if (Array.isArray(t.photos) && t.photos.length) images[t.id] = t.photos;
+}
 
 // Фильтруем только доступные наборы
 const sets = (inv.sets || [])
@@ -111,6 +123,8 @@ const output = `// ВНИМАНИЕ: этот файл генерируется 
 // Не редактируй data.js вручную — изменения будут перезаписаны.
 // Редактируй inventory.json и запусти: node compile.js
 
+const IMAGES = ${JSON.stringify(images, null, 2)};
+
 const TEAS = [
 ${teasStr}
 ];
@@ -129,14 +143,22 @@ fs.writeFileSync(OUT_PATH, output, 'utf-8');
 
 console.log(`✅ data.js обновлён`);
 console.log(`   Чаёв в боте: ${teas.length}`);
+console.log(`   Позиций с фото: ${Object.keys(images).length}`);
 console.log(`   Наборов: ${sets.length}`);
 console.log(`   Отключено (available: false): ${inv.teas.filter(t => !t.available && !t._comment).length}`);
 console.log('');
 
 // Показываем что отключено
-const disabled = inv.teas.filter(t => t.id && t.available !== true);
+const zero = inv.teas.filter(t => t.id && !inStock(t));
+if (zero.length > 0) {
+  console.log('🚫 Нет в наличии (остаток 0) — гасятся автоматически:');
+  zero.forEach(t => console.log(`   • [${t.id}] ${t.art} · ${t.name}`));
+  console.log('');
+}
+
+const disabled = inv.teas.filter(t => t.id && t.available !== true && inStock(t));
 if (disabled.length > 0) {
-  console.log('📦 Отключённые позиции (включи в inventory.json когда готово):');
+  console.log('📦 Скрыты вручную (включи в inventory.json когда готово):');
   disabled.forEach(t => {
     const note = t._admin?.notes ? ` — ${t._admin.notes}` : '';
     console.log(`   • [${t.id}] ${t.name}${note}`);

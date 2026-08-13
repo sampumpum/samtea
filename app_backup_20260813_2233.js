@@ -1,0 +1,643 @@
+// SAM TEA Mini App
+const tg = window.Telegram?.WebApp;
+if (tg) { tg.ready(); tg.expand(); }
+
+// ── ФОТО ─────────────────────────────────────────────────────────────────────
+const BASE_IMG = 'https://raw.githubusercontent.com/sampumpum/samtea/main/';
+
+const IMAGES = {
+1: ['lao_cha_tou_1.jpeg'],
+2: [],
+3: ['dyan_hun_tszin_lo_1.jpeg','dyan_hun_tszin_lo_2.jpeg','dyan_hun_tszin_lo_3.jpeg'],
+4: ['da_tszin_chzhen_van_1.jpg','da_tszin_chzhen_van_2.jpg','da_tszin_chzhen_van_3.jpg','da_tszin_chzhen_van_4.JPG','da_tszin_chzhen_van_5.jpeg'],
+5: ['ya_shi_syan_1.jpeg'],
+6: ['mi_lan_syan_1.jpeg'],
+7: ['bay_zhuy_syan_1.jpg','bay_zhuy_syan_2.jpg','bay_zhuy_syan_3.jpg'],
+8: ['zhow_guy_1.jpeg'],
+9: ['teguanyin_tsinsyan_1.jpeg'],
+10: ['molochniy_ulung_1.jpeg'],
+11: ['gaba_korol_1.jpg','gaba_korol_2.jpg','gaba_korol_3.jpg'],
+12: ['gaba_krasniy_korall_1.jpg','gaba_krasniy_korall_2.jpg','gaba_krasniy_korall_3.jpg','gaba_krasniy_korall_4.jpg'],
+13: ['moli_bay_lun_chzhu_1.jpeg'],
+14: ['shoumey_2015_1.jpeg'],
+15: ['da_hun_pao_1.jpeg'],
+20: ['shu_ivou_2008_1.jpeg'],
+};
+Object.assign(IMAGES, {"9": ["TG-6_1.jpg", "TG-6_2.jpg", "TG-6_3.jpg", "TG-6_4.jpg", "TG-6_5.jpg"], "15": ["DHP-100_1.jpg", "DHP-100_2.jpg", "DHP-100_3.jpg", "DHP-100_4.jpg", "DHP-100_5.jpg"], "100": ["HYJM-26_1.jpg", "HYJM-26_2.jpg", "HYJM-26_3.jpg", "HYJM-26_4.jpg", "HYJM-26_5.jpg"], "101": ["DHHS-26_1.jpg", "DHHS-26_2.jpg", "DHHS-26_3.jpg", "DHHS-26_4.jpg", "DHHS-26_5.jpg"], "102": ["LB-14_1.jpg", "LB-14_2.jpg", "LB-14_3.jpg", "LB-14_4.jpg", "LB-14_5.jpg"], "103": ["SJH-26_1.jpg", "SJH-26_2.jpg", "SJH-26_3.jpg", "SJH-26_4.jpg", "SJH-26_5.jpg"], "106": ["DHGS-26_1.jpg", "DHGS-26_2.jpg", "DHGS-26_3.jpg", "DHGS-26_4.jpg", "DHGS-26_5.jpg"], "107": ["HK-26_1.jpg", "HK-26_2.jpg", "HK-26_3.jpg", "HK-26_4.jpg", "HK-26_5.jpg"], "108": ["FZX-26_1.jpg", "FZX-26_2.jpg", "FZX-26_3.jpg", "FZX-26_4.jpg", "FZX-26_5.jpg"], "109": ["ZSXZ-26_1.jpg", "ZSXZ-26_2.jpg", "ZSXZ-26_3.jpg", "ZSXZ-26_4.jpg", "ZSXZ-26_5.jpg"], "110": ["SP-26_1.jpg", "SP-26_2.jpg", "SP-26_3.jpg", "SP-26_4.jpg", "SP-26_5.jpg"], "111": ["JJM-26_1.jpg", "JJM-26_2.jpg", "JJM-26_3.jpg", "JJM-26_4.jpg", "JJM-26_5.jpg"], "112": ["DHJZ-26_1.jpg", "DHJZ-26_2.jpg", "DHJZ-26_3.jpg", "DHJZ-26_4.jpg", "DHJZ-26_5.jpg"], "113": ["GYX-26_1.jpg", "GYX-26_2.jpg", "GYX-26_3.jpg", "GYX-26_4.jpg", "GYX-26_5.jpg"], "115": ["YSX-26_1.jpg", "YSX-26_2.jpg", "YSX-26_3.jpg", "YSX-26_4.jpg", "YSX-26_5.jpg"], "116": ["DGYH-26_1.jpg", "DGYH-26_2.jpg", "DGYH-26_3.jpg", "DGYH-26_4.jpg", "DGYH-26_5.jpg"], "117": ["XSYH-26_1.jpg", "XSYH-26_2.jpg", "XSYH-26_3.jpg", "XSYH-26_4.jpg", "XSYH-26_5.jpg"], "118": ["JMD-25_1.jpg", "JMD-25_2.jpg", "JMD-25_3.jpg", "JMD-25_4.jpg", "JMD-25_5.jpg"], "119": ["MLH-26_1.jpg", "MLH-26_2.jpg", "MLH-26_3.jpg", "MLH-26_4.jpg", "MLH-26_5.jpg"], "120": ["HGY-26_1.jpg", "HGY-26_2.jpg", "HGY-26_3.jpg", "HGY-26_4.jpg", "HGY-26_5.jpg"], "121": ["GYJM-26_1.jpg", "GYJM-26_2.jpg", "GYJM-26_3.jpg", "GYJM-26_4.jpg", "GYJM-26_5.jpg"], "122": ["QH-26_1.jpg", "QH-26_2.jpg", "QH-26_3.jpg", "QH-26_4.jpg", "QH-26_5.jpg"], "200": ["TRM-16CH_1.jpg", "TRM-16CH_2.jpg", "TRM-16CH_3.jpg", "TRM-16CH_4.jpg", "TRM-16CH_5.jpg"], "201": ["TRM-16SE_1.jpg", "TRM-16SE_2.jpg", "TRM-16SE_3.jpg", "TRM-16SE_4.jpg", "TRM-16SE_5.jpg"], "202": ["TRM-16SR_1.jpg", "TRM-16SR_2.jpg", "TRM-16SR_3.jpg", "TRM-16SR_4.jpg"], "203": ["TRM-640_1.jpg", "TRM-640_2.jpg", "TRM-640_3.jpg", "TRM-640_4.jpg", "TRM-640_5.jpg"], "211": ["LJZ-6_1.jpg", "LJZ-6_2.jpg", "LJZ-6_3.jpg", "LJZ-6_4.jpg"], "212": ["KLB-01_1.jpg", "KLB-01_2.jpg"], "213": ["ZNL-26_1.jpg", "ZNL-26_2.jpg", "ZNL-26_3.jpg", "ZNL-26_4.jpg", "ZNL-26_5.jpg"], "214": ["SPN-26_1.jpg", "SPN-26_2.jpg", "SPN-26_3.jpg", "SPN-26_4.jpg", "SPN-26_5.jpg"], "215": ["FIG-01_1.jpg", "FIG-01_2.jpg", "FIG-01_3.jpg", "FIG-01_4.jpg", "FIG-01_5.jpg"]});
+Object.assign(IMAGES, {"1": ["LCT-9_1.jpg", "LCT-9_2.jpg"], "2": ["SHU-BL_1.jpg", "SHU-BL_2.jpg", "SHU-BL_3.jpg", "SHU-BL_4.jpg"], "3": ["DHJL-6_1.jpg", "DHJL-6_2.jpg", "DHJL-6_3.jpg"], "4": ["DJZ-8_1.jpg", "DJZ-8_2.jpg", "DJZ-8_3.jpg", "DJZ-8_4.jpg", "DJZ-8_5.jpg"], "5": ["GSY-6_1.jpg", "GSY-6_2.jpg", "GSY-6_3.jpg"], "6": ["MLS-5_1.jpg", "MLS-5_2.jpg"], "7": ["BRX-5_1.jpg", "BRX-5_2.jpg", "BRX-5_3.jpg"], "8": ["RG-7_1.jpg", "RG-7_2.jpg", "RG-7_3.jpg"], "10": ["JX-100_1.jpg", "JX-100_2.jpg", "JX-100_3.jpg"], "11": ["GAB-KING_1.jpg", "GAB-KING_2.jpg", "GAB-KING_3.jpg"], "12": ["GAB-RC_1.jpg", "GAB-RC_2.jpg", "GAB-RC_3.jpg", "GAB-RC_4.jpg"], "13": ["MBL-4_1.jpg", "MBL-4_2.jpg", "MBL-4_3.jpg", "MBL-4_4.jpg"], "14": ["BLC-15_1.jpg", "BLC-15_2.jpg", "BLC-15_3.jpg", "BLC-15_4.jpg", "BLC-15_5.jpg"]});
+
+function getImg(id) {
+const list = IMAGES[id];
+if (!list || !list.length) return null;
+return BASE_IMG + list[0];
+}
+
+function getAllImgs(id) {
+const list = IMAGES[id] || [];
+return list.map(f => BASE_IMG + f);
+}
+
+function imgOrEmoji(tea) {
+const src = getImg(tea.id);
+if (src) return `<img src="${src}" alt="${tea.name}" style="width:100%;height:100%;object-fit:cover;border-radius:10px" onerror="this.parentNode.innerHTML='${tea.emoji}'" loading="lazy">`;
+return tea.emoji;
+}
+
+let cart = [];
+let currentTea = null;
+let currentCat = 'all';
+
+// ── RENDER ENGINE ─────────────────────────────────────────────────────────────
+
+function showScreen(id) {
+document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+const el = document.getElementById(id);
+if (el) el.classList.add('active');
+document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+const navMap = { 'screen-main': 0, 'screen-mood': 1, 'screen-search': 2, 'screen-cart': 3 };
+if (navMap[id] !== undefined) document.querySelectorAll('.nav-item')[navMap[id]]?.classList.add('active');
+}
+
+function updateCartBadge() {
+const btn = document.getElementById('cart-nav-btn');
+const cartBtn = document.getElementById('header-cart');
+const count = cart.length;
+if (btn) { btn.textContent = count > 0 ? `Корзина (${count})` : 'Корзина'; }
+if (cartBtn) {
+cartBtn.innerHTML = `<i class="ti ti-shopping-bag"></i> ${count > 0 ? count : ''}`;
+cartBtn.className = 'cart-btn' + (count > 0 ? ' has-items' : '');
+}
+}
+
+// ── MAIN SCREEN ───────────────────────────────────────────────────────────────
+
+function renderMain() {
+document.getElementById('app').innerHTML = `
+<div class="screen active" id="screen-main">
+<div class="header">
+<div>
+<div class="logo">SAM <em>TEA</em></div>
+<div class="header-sub">Китайский чай с характером</div>
+</div>
+<button class="cart-btn" id="header-cart" onclick="renderCart(); showScreen('screen-cart')">
+<i class="ti ti-shopping-bag"></i>
+</button>
+</div>
+<div class="scroll">
+<div class="mood-banner" onclick="renderMood(); showScreen('screen-mood')">
+<div class="mood-label">Подобрать чай</div>
+<div class="mood-title">Какое сейчас настроение?</div>
+<div class="mood-chips">
+<div class="mood-chip">🥶 Холодно</div>
+<div class="mood-chip">☀️ Жарко</div>
+<div class="mood-chip">🧘 Расслабиться</div>
+<div class="mood-chip">⚡ Взбодриться</div>
+</div>
+</div>
+
+<div class="specials">
+<div class="special-card" onclick="showDetail(1)">
+<div class="special-badge">☕ Сегодня</div>
+<div class="special-title">Чай дня</div>
+<div class="special-sub">Лао Ча Тоу 2005</div>
+</div>
+<div class="special-card" onclick="renderSets(); showScreen('screen-sets')">
+<div class="special-badge">🎁 Выгодно</div>
+<div class="special-title">Сет дня</div>
+<div class="special-sub">3 × 25г · от 760 ₽</div>
+</div>
+</div>
+
+<div class="section-label">Каталог</div>
+<div class="cats" id="cat-pills">
+${[
+['all','Все'], ['red','Красный'], ['ulung','Улун'], ['shu','Шу пуэр'],
+['sheng','Шэн'], ['gaba','ГАБА'], ['green','Зелёный'], ['white','Белый'],
+['heicha','Хэйча'], ['posuda','Посуда'], ['exclusive','💎 Эксклюзив']
+].map(([c,l]) => `<div class="cat-pill${currentCat===c?' active':''}" onclick="filterCat('${c}',this)">${l}</div>`).join('')}
+</div>
+<div class="tea-list" id="tea-list"></div>
+</div>
+${renderNav(0)}
+</div>
+${renderScreenShells()}
+`;
+renderTeaList(currentCat);
+updateCartBadge();
+}
+
+function renderScreenShells() {
+return `
+<div class="screen" id="screen-detail"></div>
+<div class="screen" id="screen-mood"></div>
+<div class="screen" id="screen-cart"></div>
+<div class="screen" id="screen-search"></div>
+<div class="screen" id="screen-sets"></div>
+`;
+}
+
+function renderNav(active) {
+const items = [
+['screen-main', 'ti-home', 'Главная', 'renderMain(); showScreen(\'screen-main\')'],
+['screen-mood', 'ti-mood-happy', 'Подбор', 'renderMood(); showScreen(\'screen-mood\')'],
+['screen-search', 'ti-search', 'Поиск', 'renderSearch(); showScreen(\'screen-search\')'],
+['screen-cart', 'ti-shopping-bag', 'Корзина', 'renderCart(); showScreen(\'screen-cart\')', 'cart-nav-btn'],
+];
+return `<div class="bottom-nav">${items.map((item, i) =>
+`<button class="nav-item${i===active?' active':''}" onclick="${item[3]}"><i class="ti ${item[1]}"></i>${item[4]?`<span id="${item[4]}">${i===3&&cart.length>0?`Корзина (${cart.length})`:'Корзина'}</span>`:item[2]}</button>`
+).join('')}</div>`;
+}
+
+function renderTeaList(cat) {
+const list = document.getElementById('tea-list');
+if (!list) return;
+const filtered = cat === 'all' ? TEAS : TEAS.filter(t => t.cat === cat);
+list.innerHTML = filtered.map(t => {
+const src = getImg(t.id);
+const thumb = src
+? `<div class="tea-emoji" style="overflow:hidden;padding:0"><img src="${src}" alt="${t.name}" style="width:100%;height:100%;object-fit:cover;border-radius:10px" onerror="this.parentNode.innerHTML='${t.emoji}'" loading="lazy"></div>`
+: `<div class="tea-emoji">${t.emoji}</div>`;
+return `
+<div class="tea-card" onclick="showDetail(${t.id})">
+${thumb}
+<div class="tea-info">
+<div class="tea-name">${t.name}</div>
+<div class="tea-cn">${t.subtitle}</div>
+<div class="tea-tags">
+${t.tags.slice(0,2).map(tg => `<span class="tag">${tg}</span>`).join('')}
+${t.status === 'wb' ? '<span class="tag wb">WB</span>' : ''}
+${t.exclusive ? '<span class="tag" style="color:#c8891a;border-color:rgba(200,137,26,0.4)">💎 эксклюзив</span>' : ''}
+</div>
+</div>
+<div class="tea-right">
+<div class="tea-price">${t.price} ₽</div>
+<div class="tea-weight">${t.weight}</div>
+${t.art?`<div style="font-size:10px;color:var(--text3);margin-top:2px">${t.art}</div>`:''}
+</div>
+</div>`}).join('') || '<div style="color:var(--text3);padding:20px;text-align:center;font-size:13px">Скоро появятся</div>';
+}
+
+function filterCat(cat, el) {
+currentCat = cat;
+document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+el.classList.add('active');
+renderTeaList(cat);
+}
+
+// ── DETAIL ────────────────────────────────────────────────────────────────────
+
+function showDetail(id) {
+currentTea = TEAS.find(t => t.id === id);
+if (!currentTea) return;
+const t = currentTea;
+const el = document.getElementById('screen-detail');
+const isWB = t.status === 'wb';
+const imgs = getAllImgs(t.id);
+window._currentSize = t.sizes ? t.sizes[t.sizes.length > 1 ? 1 : 0] : null;
+window._galIdx = 0;
+
+function heroHtml() {
+if (!imgs.length) return `<div class="detail-hero">${t.emoji}</div>`;
+if (imgs.length === 1) return `<div class="detail-hero" style="padding:0;overflow:hidden"><img src="${imgs[0]}" onclick="openLightbox(0)" style="width:100%;height:100%;object-fit:contain;cursor:zoom-in" onerror="this.style.display='none'" loading="lazy"></div>`;
+return `<div class="detail-hero" style="padding:0;overflow:hidden;position:relative">
+<img id="gallery-img" src="${imgs[0]}" onclick="openLightbox(window._galIdx||0)" style="width:100%;height:100%;object-fit:contain;cursor:zoom-in" loading="lazy">
+<div style="position:absolute;bottom:8px;right:10px;display:flex;gap:4px">
+${imgs.map((_,i) => `<div onclick="showGalleryImg(${i})" id="gdot-${i}" style="width:6px;height:6px;border-radius:50%;cursor:pointer;background:${i===0?'#fff':'rgba(255,255,255,0.5)'}"></div>`).join('')}
+</div>
+</div>`;
+}
+
+function sizesHtml(selG) {
+if (!t.sizes || t.sizes.length <= 1) return '';
+return `<div style="margin-bottom:14px">
+<div class="brew-label">Выбери фасовку</div>
+<div style="display:flex;gap:6px;flex-wrap:wrap">
+${t.sizes.map(s => `<button onclick="selectSize(${s.g},${s.price})"
+style="padding:7px 14px;border-radius:20px;border:0.5px solid ${s.g===selG?'var(--gold)':'var(--border)'};
+background:${s.g===selG?'var(--gold)':'var(--surface)'};
+color:${s.g===selG?'var(--bg)':'var(--text2)'};
+font-size:12px;cursor:pointer;font-family:var(--font-sans)">${s.g}г · ${s.price} ₽</button>`).join('')}
+</div>
+</div>`;
+}
+
+const initPrice = window._currentSize ? window._currentSize.price : t.price;
+const initG = window._currentSize ? window._currentSize.g : null;
+
+el.innerHTML = `
+<div class="header">
+<button class="back-btn" onclick="showScreen('screen-main')"><i class="ti ti-arrow-left"></i> Назад</button>
+<div style="font-size:11px;color:var(--text3)">${t.cn}</div>
+</div>
+${heroHtml()}
+<div class="detail-scroll">
+<div class="detail-name">${t.name}</div>
+<div class="detail-cn">${t.subtitle}${t.cn?' · '+t.cn:''}</div>
+<div class="price-row">
+<div class="detail-price" id="cur-price">${initPrice} ₽</div>
+<div class="detail-weight">${initG ? initG+'г' : t.weight}</div>
+</div>
+<div class="status-row">
+<div class="dot ${isWB?'dot-blue':'dot-green'}"></div>
+<div class="status-text">${isWB?'Доступен на Wildberries':'Есть в наличии'}</div>
+</div>
+${t.art?`<div style="font-size:11px;color:var(--text3);letter-spacing:0.03em;margin-bottom:12px">Артикул: <span style="color:var(--text2)">${t.art}</span></div>`:''}
+${t.exclusive?`<div style="background:rgba(200,137,26,0.1);border:0.5px solid rgba(200,137,26,0.3);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:14px;font-size:12px;color:var(--gold-light)">💎 Эксклюзив — редкий лот из личной коллекции</div>`:''}
+<div class="quote-block">${t.quote}</div>
+<div id="sizes-wrap">${sizesHtml(initG)}</div>
+${t.brew?`<div class="brew-label">Как заваривать</div>
+<div class="brew-grid">
+<div class="brew-cell"><div class="brew-val">${t.brew.g}</div><div class="brew-key">на 150мл</div></div>
+<div class="brew-cell"><div class="brew-val">${t.brew.t}</div><div class="brew-key">вода</div></div>
+<div class="brew-cell"><div class="brew-val">${t.brew.s}</div><div class="brew-key">1й пролив</div></div>
+<div class="brew-cell"><div class="brew-val">${t.brew.prolivs}</div><div class="brew-key">проливов</div></div>
+</div>`:''}
+${t.coldBrew?`<div class="cold-brew-badge"><i class="ti ti-snowflake"></i>Подходит для холодного заваривания (6ч в холодильнике)</div>`:''}
+<div class="detail-tags">${(t.tags||[]).map(tg=>`<span class="detail-tag">${tg}</span>`).join('')}</div>
+${t.desc?`<div style="font-size:13px;color:var(--text2);line-height:1.65;margin-top:14px">${t.desc}</div>`:''}
+</div>
+<div class="action-bar">
+${isWB
+?`<button class="btn-secondary" onclick="window.open('${t.wb}','_blank')"><i class="ti ti-external-link"></i> Купить на Wildberries</button>`
+:`<button class="btn-primary" onclick="addToCart(${t.id})">В корзину — <span id="btn-p">${initPrice}</span> ₽</button>`}
+</div>`;
+showScreen('screen-detail');
+}
+
+function showGalleryImg(i) {
+const imgs = getAllImgs(currentTea?.id);
+window._galIdx = i;
+const el = document.getElementById('gallery-img');
+if (el && imgs[i]) el.src = imgs[i];
+document.querySelectorAll('[id^="gdot-"]').forEach((d,idx) => {
+d.style.background = idx===i ? '#fff' : 'rgba(255,255,255,0.5)';
+});
+}
+
+// ── LIGHTBOX (полноэкранный просмотр: свайп + зум, как в Instagram) ────────────
+function openLightbox(start) {
+const imgs = getAllImgs(currentTea?.id);
+if (!imgs.length) return;
+let idx = Math.min(Math.max(start || 0, 0), imgs.length - 1);
+let scale = 1, ox = 0, oy = 0, px = 0, py = 0, pd = 0, ps = 1;
+let sx = 0, sy = 0, axis = null, anim = false;
+const multi = imgs.length > 1;
+const ov = document.createElement('div');
+ov.id = 'lightbox';
+ov.style.cssText = 'position:fixed;inset:0;background:#000;z-index:99999;display:flex;align-items:center;justify-content:center;overflow:hidden;touch-action:none';
+ov.innerHTML =
+'<img id="lb-img" src="' + imgs[idx] + '" draggable="false" style="max-width:100%;max-height:100%;object-fit:contain;transform-origin:center;will-change:transform">'
++ '<div id="lb-back" style="position:absolute;top:12px;left:12px;display:flex;align-items:center;gap:5px;padding:8px 14px 8px 11px;border-radius:20px;background:rgba(0,0,0,.5);color:#fff;font-size:15px;cursor:pointer"><i class="ti ti-arrow-left" style="font-size:18px"></i>Назад</div>'
++ (multi ? '<div id="lb-p" style="position:absolute;left:6px;top:50%;transform:translateY(-50%);width:38px;height:56px;background:rgba(255,255,255,.10);color:#fff;font-size:26px;display:flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer">‹</div><div id="lb-n" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);width:38px;height:56px;background:rgba(255,255,255,.10);color:#fff;font-size:26px;display:flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer">›</div><div id="lb-c" style="position:absolute;bottom:16px;left:0;right:0;text-align:center;color:#fff;font-size:13px;opacity:.85">' + (idx + 1) + ' / ' + imgs.length + '</div>' : '');
+document.body.appendChild(ov);
+const img = ov.querySelector('#lb-img');
+const draw = (a) => { img.style.transition = a ? 'transform .18s ease-out' : 'none'; img.style.transform = 'translate(' + ox + 'px,' + oy + 'px) scale(' + scale + ')'; };
+const reset = () => { scale = 1; ox = 0; oy = 0; draw(true); };
+const count = () => { const c = ov.querySelector('#lb-c'); if (c) c.textContent = (idx + 1) + ' / ' + imgs.length; };
+const close = () => { if (ov.parentNode) ov.parentNode.removeChild(ov); };
+const slide = (dir) => {
+if (anim || !multi) return; anim = true;
+img.style.transition = 'transform .15s ease-in'; img.style.transform = 'translateX(' + (dir > 0 ? '-110%' : '110%') + ')';
+setTimeout(() => {
+idx = (idx + dir + imgs.length) % imgs.length; img.src = imgs[idx]; count(); scale = 1; ox = 0; oy = 0;
+img.style.transition = 'none'; img.style.transform = 'translateX(' + (dir > 0 ? '110%' : '-110%') + ')';
+void img.offsetWidth;
+img.style.transition = 'transform .15s ease-out'; img.style.transform = 'translateX(0)'; anim = false;
+}, 150);
+};
+ov.querySelector('#lb-back').onclick = close;
+if (multi) { ov.querySelector('#lb-p').onclick = () => slide(-1); ov.querySelector('#lb-n').onclick = () => slide(1); }
+const D = (t) => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+img.addEventListener('dblclick', () => { if (scale > 1) reset(); else { scale = 2.5; draw(true); } });
+img.addEventListener('touchstart', (e) => {
+if (anim) return;
+if (e.touches.length === 2) { pd = D(e.touches); ps = scale; axis = 'zoom'; return; }
+const now = Date.now();
+if (now - (img._lt || 0) < 300) { if (scale > 1) reset(); else { scale = 2.5; draw(true); } }
+img._lt = now; sx = e.touches[0].clientX; sy = e.touches[0].clientY; px = ox; py = oy; axis = null;
+}, { passive: true });
+img.addEventListener('touchmove', (e) => {
+if (anim) return;
+if (e.touches.length === 2) { scale = Math.min(4, Math.max(1, ps * D(e.touches) / pd)); draw(false); return; }
+const dx = e.touches[0].clientX - sx, dy = e.touches[0].clientY - sy;
+if (scale > 1) { ox = px + dx; oy = py + dy; draw(false); return; }
+if (!axis && (Math.abs(dx) > 8 || Math.abs(dy) > 8)) axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+if (axis === 'x') { img.style.transition = 'none'; img.style.transform = 'translateX(' + dx + 'px)'; }
+else if (axis === 'y' && dy > 0) { img.style.transition = 'none'; img.style.transform = 'translateY(' + dy + 'px)'; ov.style.background = 'rgba(0,0,0,' + (1 - Math.min(dy / 450, 0.7)) + ')'; }
+}, { passive: true });
+img.addEventListener('touchend', (e) => {
+if (anim || scale > 1) return;
+const ct = e.changedTouches[0] || { clientX: sx, clientY: sy };
+const dx = ct.clientX - sx, dy = ct.clientY - sy;
+ov.style.background = '#000';
+if (axis === 'y' && dy > 120) { close(); return; }
+if (axis === 'x' && dx <= -55) { slide(1); return; }
+if (axis === 'x' && dx >= 55) { slide(-1); return; }
+img.style.transition = 'transform .18s ease-out'; img.style.transform = 'translate(0,0) scale(1)';
+});
+draw(false);
+}
+
+function selectSize(g, price) {
+window._currentSize = {g, price};
+const cp = document.getElementById('cur-price');
+const bp = document.getElementById('btn-p');
+if (cp) cp.textContent = price + ' ₽';
+if (bp) bp.textContent = price;
+const sw = document.getElementById('sizes-wrap');
+if (sw && currentTea?.sizes) {
+sw.innerHTML = (() => {
+return `<div style="margin-bottom:14px">
+<div class="brew-label">Выбери фасовку</div>
+<div style="display:flex;gap:6px;flex-wrap:wrap">
+${currentTea.sizes.map(s=>`<button onclick="selectSize(${s.g},${s.price})"
+style="padding:7px 14px;border-radius:20px;border:0.5px solid ${s.g===g?'var(--gold)':'var(--border)'};
+background:${s.g===g?'var(--gold)':'var(--surface)'};
+color:${s.g===g?'var(--bg)':'var(--text2)'};
+font-size:12px;cursor:pointer;font-family:var(--font-sans)">${s.g}г · ${s.price} ₽</button>`).join('')}
+</div>
+</div>`;
+})();
+}
+}
+
+// ── CART ──────────────────────────────────────────────────────────────────────
+
+function addToCart(id) {
+const tea = TEAS.find(t => t.id === id);
+if (!tea) return;
+cart.push({ ...tea, cartId: Date.now() });
+updateCartBadge();
+renderCart();
+showScreen('screen-cart');
+}
+
+function removeFromCart(cartId) {
+cart = cart.filter(i => i.cartId !== cartId);
+updateCartBadge();
+renderCart();
+}
+
+function renderCart() {
+const el = document.getElementById('screen-cart');
+const total = cart.reduce((s, i) => s + i.price, 0);
+el.innerHTML = `
+<div class="header">
+<button class="back-btn" onclick="showScreen('screen-main')"><i class="ti ti-arrow-left"></i> Назад</button>
+<div class="logo">Корзина</div>
+</div>
+${cart.length === 0
+? `<div class="cart-empty"><i class="ti ti-shopping-bag"></i><div style="font-size:14px">Корзина пуста</div><div style="font-size:12px">Добавьте чай из каталога</div></div>`
+: `<div class="cart-items">${cart.map(i => `
+<div class="tea-card" style="cursor:default">
+<div class="tea-emoji">${i.emoji}</div>
+<div class="tea-info">
+<div class="tea-name">${i.name}</div>
+<div class="tea-cn">${i.weight}</div>
+</div>
+<div class="tea-right">
+<div class="tea-price">${i.price} ₽</div>
+<button onclick="removeFromCart(${i.cartId})" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:18px;padding:0;margin-top:4px"><i class="ti ti-x"></i></button>
+</div>
+</div>`).join('')}
+</div>
+<div class="cart-total"><span class="cart-total-label">Итого</span><span class="cart-total-sum">${total} ₽</span></div>`
+}
+<div class="action-bar">
+<button class="btn-primary" onclick="checkout()" ${cart.length === 0 ? 'disabled style="opacity:0.4"' : ''}>Оформить заказ${cart.length > 0 ? ` — ${total} ₽` : ''}</button>
+</div>
+`;
+}
+
+function checkout() {
+if (cart.length === 0) return;
+const total = cart.reduce((s,i) => s + i.price, 0);
+const items = cart.map(i => `• ${i.name} ${i.weight} — ${i.price} ₽`).join('\n');
+const el = document.getElementById('screen-cart');
+
+// Реквизиты — хардкод
+const PHONE = '+79853422921';
+const BANK = 'Сбер / Т-Банк / ВТБ';
+const TG = 'samtruesam';
+
+// QR-код — просто показываем номер телефона для СБП
+// (НСПК QR требует регистрации, используем текстовый вариант)
+const orderText = encodeURIComponent('Привет! Хочу заказать:\n' + items + '\n\nИтого: ' + total + ' ₽');
+
+el.innerHTML = `
+<div class="header">
+<button class="back-btn" onclick="renderCart()"><i class="ti ti-arrow-left"></i> Назад</button>
+<div class="logo">Оплата</div>
+</div>
+<div style="flex:1;overflow-y:auto;padding:20px 16px">
+<div style="text-align:center;margin-bottom:20px">
+<div style="font-size:32px;font-weight:500;color:var(--text);margin-bottom:4px">${total} ₽</div>
+<div style="font-size:13px;color:var(--text3)">${cart.length} позиц${cart.length===1?'ия':cart.length<5?'ии':'ий'}</div>
+</div>
+
+<div style="background:var(--surface);border:0.5px solid var(--gold-border);border-radius:var(--radius);padding:20px;text-align:center;margin-bottom:14px">
+<div style="font-size:11px;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:14px">Оплата по СБП</div>
+<div style="font-size:28px;font-weight:500;color:var(--text);letter-spacing:0.05em;margin-bottom:6px">+7 985 342-29-21</div>
+<div style="font-size:13px;color:var(--text2);margin-bottom:4px">${BANK}</div>
+<div style="font-size:12px;color:var(--text3);margin-top:8px">Получатель: Александр К.</div>
+<div style="margin-top:14px;padding:10px;background:var(--bg3);border-radius:var(--radius-sm)">
+<div style="font-size:12px;color:var(--text3);line-height:1.6">Открой приложение банка → Переводы → По номеру телефона → введи номер выше → укажи сумму <strong style="color:var(--text)">${total} ₽</strong></div>
+</div>
+</div>
+
+<div style="background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:14px">
+<div style="font-size:11px;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px">Или наличными при встрече</div>
+<div style="font-size:13px;color:var(--text2);margin-bottom:12px">Напиши Сэму — договоримся о доставке по Москве или самовывозе</div>
+<a href="https://t.me/${TG}?text=${orderText}" target="_blank"
+style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;background:var(--gold);color:var(--bg);border-radius:var(--radius);font-size:14px;font-weight:600;text-decoration:none;font-family:var(--font-sans)">
+✈️ Написать Сэму в Telegram
+</a>
+</div>
+
+<div style="background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:14px">
+<div style="font-size:11px;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px">Доставка</div>
+<div style="font-size:13px;color:var(--text2);line-height:1.8">🚗 Курьер по Москве — договорная<br>📦 СДЭК по России — от 300 ₽<br>🤝 Самовывоз — бесплатно</div>
+</div>
+
+<div style="padding:12px;border-radius:var(--radius-sm);background:rgba(200,137,26,0.08);border:0.5px solid var(--gold-border)">
+<div style="font-size:12px;color:var(--gold-light);line-height:1.6">После оплаты пришли скриншот чека в Telegram — подтвержу заказ и свяжусь для деталей доставки.</div>
+</div>
+</div>`;
+showScreen('screen-cart');
+}
+
+// ── MOOD FLOW ─────────────────────────────────────────────────────────────────
+
+const MOOD_FLOW = {
+start: {
+q: 'Какая сейчас погода?',
+opts: [
+{ icon: '🥶', text: 'Холодно', sub: 'Хочется согреться', next: 'cold' },
+{ icon: '😊', text: 'Тепло и комфортно', sub: 'Обычный день', next: 'warm' },
+{ icon: '🌞', text: 'Жарко', sub: 'Хочется освежиться', next: 'hot' },
+]
+},
+cold: {
+q: 'Что хочется сейчас?',
+opts: [
+{ icon: '⚡', text: 'Взбодриться', sub: 'Зарядиться энергией', result: [2, 1] },
+{ icon: '🧘', text: 'Расслабиться', sub: 'Отдохнуть после дня', result: [1, 11] },
+{ icon: '🍫', text: 'Что-то тёмное, глубокое', sub: 'Насыщенный вкус', result: [2, 1] },
+]
+},
+warm: {
+q: 'Какой вкус сегодня?',
+opts: [
+{ icon: '🌸', text: 'Цветочное, нежное', sub: 'Лёгкость и аромат', result: [9, 6] },
+{ icon: '🪨', text: 'Глубокое, минеральное', sub: 'Характерный вкус', result: [7, 8] },
+{ icon: '🌅', text: 'Медовое, сладкое', sub: 'Тёплый уют', result: [3, 4] },
+]
+},
+hot: {
+q: 'Как будешь пить?',
+opts: [
+{ icon: '🧊', text: 'Холодное заваривание', sub: 'В холодильник на ночь', result: [13, 9] },
+{ icon: '🌿', text: 'Горячий, но лёгкий', sub: 'Не тяжёлый', result: [13, 10] },
+{ icon: '✨', text: 'Попробовать что-то новое', sub: 'Удиви меня', result: [11, 5] },
+]
+},
+};
+
+function renderMood(step = 'start') {
+const el = document.getElementById('screen-mood');
+const flow = MOOD_FLOW[step];
+el.innerHTML = `
+<div class="header">
+<button class="back-btn" onclick="${step === 'start' ? "showScreen('screen-main')" : "renderMood('start')"}">
+<i class="ti ti-arrow-left"></i> ${step === 'start' ? 'Назад' : 'Заново'}
+</button>
+</div>
+<div class="scroll">
+<div class="mood-flow">
+<div class="flow-q">${flow.q}</div>
+<div class="flow-options">
+${flow.opts.map(o => `
+<div class="flow-option" onclick="${o.next ? `renderMood('${o.next}')` : `showMoodResult(${JSON.stringify(o.result)})`}">
+<div class="flow-icon">${o.icon}</div>
+<div class="flow-text">
+<div>${o.text}</div>
+<div class="flow-sub">${o.sub}</div>
+</div>
+<i class="ti ti-chevron-right" style="color:var(--text3);font-size:16px"></i>
+</div>`).join('')}
+</div>
+</div>
+</div>
+${renderNav(1)}
+`;
+}
+
+function showMoodResult(ids) {
+const el = document.getElementById('screen-mood');
+const teas = ids.map(id => TEAS.find(t => t.id === id)).filter(Boolean);
+el.innerHTML = `
+<div class="header">
+<button class="back-btn" onclick="renderMood()"><i class="ti ti-arrow-left"></i> Ещё раз</button>
+</div>
+<div class="scroll">
+<div class="mood-flow">
+<div class="flow-q">Вот что тебе подойдёт</div>
+${teas.map(t => `
+<div class="result-card" onclick="showDetail(${t.id})">
+<div class="result-top">
+<div class="result-emoji">${t.emoji}</div>
+<div><div class="result-name">${t.name}</div><div class="result-cn">${t.subtitle}</div></div>
+</div>
+<div class="result-quote">${t.quote.slice(0, 100)}...</div>
+<div class="result-footer">
+<span class="result-price">${t.price} ₽</span>
+<span class="result-weight">${t.weight}</span>
+</div>
+</div>`).join('')}
+<button class="retry-btn" onclick="renderMood()">Попробовать другой подбор</button>
+</div>
+</div>
+${renderNav(1)}
+`;
+}
+
+// ── SEARCH ────────────────────────────────────────────────────────────────────
+
+function renderSearch() {
+const el = document.getElementById('screen-search');
+el.innerHTML = `
+<div class="search-wrap">
+<button class="search-back" onclick="showScreen('screen-main')"><i class="ti ti-arrow-left"></i></button>
+<input type="text" id="search-input" placeholder="Найти чай..." autofocus oninput="doSearch(this.value)">
+</div>
+<div class="search-results" id="search-results">
+<div class="no-results" style="padding-top:30px;color:var(--text3)">Начни вводить название</div>
+</div>
+${renderNav(2)}
+`;
+setTimeout(() => document.getElementById('search-input')?.focus(), 100);
+}
+
+function doSearch(q) {
+const res = document.getElementById('search-results');
+if (!res) return;
+if (!q.trim()) { res.innerHTML = ''; return; }
+const qLow = q.toLowerCase();
+const found = TEAS.filter(t =>
+t.name.toLowerCase().includes(qLow) ||
+t.subtitle.toLowerCase().includes(qLow) ||
+t.cn.includes(q) ||
+t.tags.some(tg => tg.toLowerCase().includes(qLow))
+);
+res.innerHTML = found.length
+? `<div class="tea-list">${found.map(t => `
+<div class="tea-card" onclick="showDetail(${t.id})">
+<div class="tea-emoji">${t.emoji}</div>
+<div class="tea-info">
+<div class="tea-name">${t.name}</div>
+<div class="tea-cn">${t.subtitle}</div>
+<div class="tea-tags">${t.tags.slice(0,2).map(tg=>`<span class="tag">${tg}</span>`).join('')}</div>
+</div>
+<div class="tea-right"><div class="tea-price">${t.price} ₽</div></div>
+</div>`).join('')}</div>`
+: '<div class="no-results">Ничего не найдено</div>';
+}
+
+// ── SETS ──────────────────────────────────────────────────────────────────────
+
+function renderSets() {
+const el = document.getElementById('screen-sets');
+el.innerHTML = `
+<div class="header">
+<button class="back-btn" onclick="showScreen('screen-main')"><i class="ti ti-arrow-left"></i> Назад</button>
+<div class="logo">Сеты</div>
+</div>
+<div class="scroll">
+<div style="margin-bottom:14px">
+${SETS.map(s => `
+<div class="set-card">
+<div class="set-emoji">${s.emoji}</div>
+<div class="set-info">
+<div class="set-name">${s.name}</div>
+<div class="set-sub">${s.subtitle} · ${s.weight}</div>
+<div class="set-price">${s.price} ₽</div>
+</div>
+</div>`).join('')}
+</div>
+<div class="section-label">Чаи в сетах</div>
+${SETS.map(s => s.teas.map(id => TEAS.find(t => t.id === id)).filter(Boolean).map(t => `
+<div class="tea-card" onclick="showDetail(${t.id})">
+<div class="tea-emoji">${t.emoji}</div>
+<div class="tea-info">
+<div class="tea-name">${t.name}</div>
+<div class="tea-cn">${t.subtitle}</div>
+</div>
+<div class="tea-right"><div class="tea-price">${t.price} ₽</div></div>
+</div>`).join('')).join('')}
+</div>
+${renderNav(-1)}
+`;
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+renderMain();

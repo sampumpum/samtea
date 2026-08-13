@@ -5,26 +5,8 @@ if (tg) { tg.ready(); tg.expand(); }
 // ── ФОТО ─────────────────────────────────────────────────────────────────────
 const BASE_IMG = 'https://raw.githubusercontent.com/sampumpum/samtea/main/';
 
-const IMAGES = {
-1: ['lao_cha_tou_1.jpeg'],
-2: [],
-3: ['dyan_hun_tszin_lo_1.jpeg','dyan_hun_tszin_lo_2.jpeg','dyan_hun_tszin_lo_3.jpeg'],
-4: ['da_tszin_chzhen_van_1.jpg','da_tszin_chzhen_van_2.jpg','da_tszin_chzhen_van_3.jpg','da_tszin_chzhen_van_4.JPG','da_tszin_chzhen_van_5.jpeg'],
-5: ['ya_shi_syan_1.jpeg'],
-6: ['mi_lan_syan_1.jpeg'],
-7: ['bay_zhuy_syan_1.jpg','bay_zhuy_syan_2.jpg','bay_zhuy_syan_3.jpg'],
-8: ['zhow_guy_1.jpeg'],
-9: ['teguanyin_tsinsyan_1.jpeg'],
-10: ['molochniy_ulung_1.jpeg'],
-11: ['gaba_korol_1.jpg','gaba_korol_2.jpg','gaba_korol_3.jpg'],
-12: ['gaba_krasniy_korall_1.jpg','gaba_krasniy_korall_2.jpg','gaba_krasniy_korall_3.jpg','gaba_krasniy_korall_4.jpg'],
-13: ['moli_bay_lun_chzhu_1.jpeg'],
-14: ['shoumey_2015_1.jpeg'],
-15: ['da_hun_pao_1.jpeg'],
-20: ['shu_ivou_2008_1.jpeg'],
-};
-Object.assign(IMAGES, {"9": ["TG-6_1.jpg", "TG-6_2.jpg", "TG-6_3.jpg", "TG-6_4.jpg", "TG-6_5.jpg"], "15": ["DHP-100_1.jpg", "DHP-100_2.jpg", "DHP-100_3.jpg", "DHP-100_4.jpg", "DHP-100_5.jpg"], "100": ["HYJM-26_1.jpg", "HYJM-26_2.jpg", "HYJM-26_3.jpg", "HYJM-26_4.jpg", "HYJM-26_5.jpg"], "101": ["DHHS-26_1.jpg", "DHHS-26_2.jpg", "DHHS-26_3.jpg", "DHHS-26_4.jpg", "DHHS-26_5.jpg"], "102": ["LB-14_1.jpg", "LB-14_2.jpg", "LB-14_3.jpg", "LB-14_4.jpg", "LB-14_5.jpg"], "103": ["SJH-26_1.jpg", "SJH-26_2.jpg", "SJH-26_3.jpg", "SJH-26_4.jpg", "SJH-26_5.jpg"], "106": ["DHGS-26_1.jpg", "DHGS-26_2.jpg", "DHGS-26_3.jpg", "DHGS-26_4.jpg", "DHGS-26_5.jpg"], "107": ["HK-26_1.jpg", "HK-26_2.jpg", "HK-26_3.jpg", "HK-26_4.jpg", "HK-26_5.jpg"], "108": ["FZX-26_1.jpg", "FZX-26_2.jpg", "FZX-26_3.jpg", "FZX-26_4.jpg", "FZX-26_5.jpg"], "109": ["ZSXZ-26_1.jpg", "ZSXZ-26_2.jpg", "ZSXZ-26_3.jpg", "ZSXZ-26_4.jpg", "ZSXZ-26_5.jpg"], "110": ["SP-26_1.jpg", "SP-26_2.jpg", "SP-26_3.jpg", "SP-26_4.jpg", "SP-26_5.jpg"], "111": ["JJM-26_1.jpg", "JJM-26_2.jpg", "JJM-26_3.jpg", "JJM-26_4.jpg", "JJM-26_5.jpg"], "112": ["DHJZ-26_1.jpg", "DHJZ-26_2.jpg", "DHJZ-26_3.jpg", "DHJZ-26_4.jpg", "DHJZ-26_5.jpg"], "113": ["GYX-26_1.jpg", "GYX-26_2.jpg", "GYX-26_3.jpg", "GYX-26_4.jpg", "GYX-26_5.jpg"], "115": ["YSX-26_1.jpg", "YSX-26_2.jpg", "YSX-26_3.jpg", "YSX-26_4.jpg", "YSX-26_5.jpg"], "116": ["DGYH-26_1.jpg", "DGYH-26_2.jpg", "DGYH-26_3.jpg", "DGYH-26_4.jpg", "DGYH-26_5.jpg"], "117": ["XSYH-26_1.jpg", "XSYH-26_2.jpg", "XSYH-26_3.jpg", "XSYH-26_4.jpg", "XSYH-26_5.jpg"], "118": ["JMD-25_1.jpg", "JMD-25_2.jpg", "JMD-25_3.jpg", "JMD-25_4.jpg", "JMD-25_5.jpg"], "119": ["MLH-26_1.jpg", "MLH-26_2.jpg", "MLH-26_3.jpg", "MLH-26_4.jpg", "MLH-26_5.jpg"], "120": ["HGY-26_1.jpg", "HGY-26_2.jpg", "HGY-26_3.jpg", "HGY-26_4.jpg", "HGY-26_5.jpg"], "121": ["GYJM-26_1.jpg", "GYJM-26_2.jpg", "GYJM-26_3.jpg", "GYJM-26_4.jpg", "GYJM-26_5.jpg"], "122": ["QH-26_1.jpg", "QH-26_2.jpg", "QH-26_3.jpg", "QH-26_4.jpg", "QH-26_5.jpg"], "200": ["TRM-16CH_1.jpg", "TRM-16CH_2.jpg", "TRM-16CH_3.jpg", "TRM-16CH_4.jpg", "TRM-16CH_5.jpg"], "201": ["TRM-16SE_1.jpg", "TRM-16SE_2.jpg", "TRM-16SE_3.jpg", "TRM-16SE_4.jpg", "TRM-16SE_5.jpg"], "202": ["TRM-16SR_1.jpg", "TRM-16SR_2.jpg", "TRM-16SR_3.jpg", "TRM-16SR_4.jpg"], "203": ["TRM-640_1.jpg", "TRM-640_2.jpg", "TRM-640_3.jpg", "TRM-640_4.jpg", "TRM-640_5.jpg"], "211": ["LJZ-6_1.jpg", "LJZ-6_2.jpg", "LJZ-6_3.jpg", "LJZ-6_4.jpg"], "212": ["KLB-01_1.jpg", "KLB-01_2.jpg"], "213": ["ZNL-26_1.jpg", "ZNL-26_2.jpg", "ZNL-26_3.jpg", "ZNL-26_4.jpg", "ZNL-26_5.jpg"], "214": ["SPN-26_1.jpg", "SPN-26_2.jpg", "SPN-26_3.jpg", "SPN-26_4.jpg", "SPN-26_5.jpg"], "215": ["FIG-01_1.jpg", "FIG-01_2.jpg", "FIG-01_3.jpg", "FIG-01_4.jpg", "FIG-01_5.jpg"]});
-Object.assign(IMAGES, {"1": ["LCT-9_1.jpg", "LCT-9_2.jpg"], "2": ["SHU-BL_1.jpg", "SHU-BL_2.jpg", "SHU-BL_3.jpg", "SHU-BL_4.jpg"], "3": ["DHJL-6_1.jpg", "DHJL-6_2.jpg", "DHJL-6_3.jpg"], "4": ["DJZ-8_1.jpg", "DJZ-8_2.jpg", "DJZ-8_3.jpg", "DJZ-8_4.jpg", "DJZ-8_5.jpg"], "5": ["GSY-6_1.jpg", "GSY-6_2.jpg", "GSY-6_3.jpg"], "6": ["MLS-5_1.jpg", "MLS-5_2.jpg"], "7": ["BRX-5_1.jpg", "BRX-5_2.jpg", "BRX-5_3.jpg"], "8": ["RG-7_1.jpg", "RG-7_2.jpg", "RG-7_3.jpg"], "10": ["JX-100_1.jpg", "JX-100_2.jpg", "JX-100_3.jpg"], "11": ["GAB-KING_1.jpg", "GAB-KING_2.jpg", "GAB-KING_3.jpg"], "12": ["GAB-RC_1.jpg", "GAB-RC_2.jpg", "GAB-RC_3.jpg", "GAB-RC_4.jpg"], "13": ["MBL-4_1.jpg", "MBL-4_2.jpg", "MBL-4_3.jpg", "MBL-4_4.jpg"], "14": ["BLC-15_1.jpg", "BLC-15_2.jpg", "BLC-15_3.jpg", "BLC-15_4.jpg", "BLC-15_5.jpg"]});
+// Фото приходят из data.js (IMAGES) — генерируются из inventory.json.
+// Руками здесь ничего не правим: меняй photos в inventory.json и запускай compile.js.
 
 function getImg(id) {
 const list = IMAGES[id];
@@ -99,12 +81,12 @@ document.getElementById('app').innerHTML = `
 <div class="special-card" onclick="showDetail(1)">
 <div class="special-badge">☕ Сегодня</div>
 <div class="special-title">Чай дня</div>
-<div class="special-sub">Лао Ча Тоу 2005</div>
+<div class="special-sub">Лао Ча Тоу</div>
 </div>
 <div class="special-card" onclick="renderSets(); showScreen('screen-sets')">
 <div class="special-badge">🎁 Выгодно</div>
 <div class="special-title">Сет дня</div>
-<div class="special-sub">3 × 25г · от 760 ₽</div>
+<div class="special-sub">Жоу Гуи и Цзюнь Мэи · от 390 ₽</div>
 </div>
 </div>
 
@@ -165,6 +147,7 @@ ${thumb}
 <div class="tea-cn">${t.subtitle}</div>
 <div class="tea-tags">
 ${t.tags.slice(0,2).map(tg => `<span class="tag">${tg}</span>`).join('')}
+${t.left ? `<span class="tag" style="color:#c8891a;border-color:rgba(200,137,26,0.45)">${t.left === 1 ? 'остался 1' : 'осталось ' + t.left}</span>` : ''}
 ${t.status === 'wb' ? '<span class="tag wb">WB</span>' : ''}
 ${t.exclusive ? '<span class="tag" style="color:#c8891a;border-color:rgba(200,137,26,0.4)">💎 эксклюзив</span>' : ''}
 </div>
@@ -239,11 +222,11 @@ ${heroHtml()}
 </div>
 <div class="status-row">
 <div class="dot ${isWB?'dot-blue':'dot-green'}"></div>
-<div class="status-text">${isWB?'Доступен на Wildberries':'Есть в наличии'}</div>
+<div class="status-text">${isWB?'Доступен на Wildberries':(t.left?(t.left===1?'Остался 1 — больше не будет':`Осталось ${t.left}`):'Есть в наличии')}</div>
 </div>
 ${t.art?`<div style="font-size:11px;color:var(--text3);letter-spacing:0.03em;margin-bottom:12px">Артикул: <span style="color:var(--text2)">${t.art}</span></div>`:''}
 ${t.exclusive?`<div style="background:rgba(200,137,26,0.1);border:0.5px solid rgba(200,137,26,0.3);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:14px;font-size:12px;color:var(--gold-light)">💎 Эксклюзив — редкий лот из личной коллекции</div>`:''}
-<div class="quote-block">${t.quote}</div>
+${t.quote?`<div class="quote-block">${t.quote}</div>`:''}
 <div id="sizes-wrap">${sizesHtml(initG)}</div>
 ${t.brew?`<div class="brew-label">Как заваривать</div>
 <div class="brew-grid">
@@ -488,17 +471,17 @@ opts: [
 warm: {
 q: 'Какой вкус сегодня?',
 opts: [
-{ icon: '🌸', text: 'Цветочное, нежное', sub: 'Лёгкость и аромат', result: [9, 6] },
-{ icon: '🪨', text: 'Глубокое, минеральное', sub: 'Характерный вкус', result: [7, 8] },
-{ icon: '🌅', text: 'Медовое, сладкое', sub: 'Тёплый уют', result: [3, 4] },
+{ icon: '🌸', text: 'Цветочное, нежное', sub: 'Лёгкость и аромат', result: [9, 119] },
+{ icon: '🪨', text: 'Глубокое, минеральное', sub: 'Характерный вкус', result: [123, 15] },
+{ icon: '🌅', text: 'Медовое, сладкое', sub: 'Тёплый уют', result: [101, 113] },
 ]
 },
 hot: {
 q: 'Как будешь пить?',
 opts: [
-{ icon: '🧊', text: 'Холодное заваривание', sub: 'В холодильник на ночь', result: [13, 9] },
-{ icon: '🌿', text: 'Горячий, но лёгкий', sub: 'Не тяжёлый', result: [13, 10] },
-{ icon: '✨', text: 'Попробовать что-то новое', sub: 'Удиви меня', result: [11, 5] },
+{ icon: '🧊', text: 'Холодное заваривание', sub: 'В холодильник на ночь', result: [119, 9] },
+{ icon: '🌿', text: 'Горячий, но лёгкий', sub: 'Не тяжёлый', result: [110, 10] },
+{ icon: '✨', text: 'Попробовать что-то новое', sub: 'Удиви меня', result: [11, 22] },
 ]
 },
 };
@@ -548,7 +531,7 @@ ${teas.map(t => `
 <div class="result-emoji">${t.emoji}</div>
 <div><div class="result-name">${t.name}</div><div class="result-cn">${t.subtitle}</div></div>
 </div>
-<div class="result-quote">${t.quote.slice(0, 100)}...</div>
+${t.quote?`<div class="result-quote">${t.quote.slice(0, 100)}...</div>`:''}
 <div class="result-footer">
 <span class="result-price">${t.price} ₽</span>
 <span class="result-weight">${t.weight}</span>
