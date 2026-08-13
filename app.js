@@ -19,7 +19,15 @@ const list = IMAGES[id] || [];
 return list.map(f => BASE_IMG + f);
 }
 
+// Цена-ориентир для списков: показываем за 50 г, чтобы не пугать сотней сразу.
+// Где фасовки 50 г нет (пакетики, блины, посуда, распродажа) — базовая цена.
+function listPrice(t) {
+const s = (t.sizes || []).find(x => x.g === 50);
+return s ? { price: s.price, unit: '50г' } : { price: t.price, unit: t.weight };
+}
+
 function imgOrEmoji(tea) {
+
 const src = getImg(tea.id);
 if (src) return `<img src="${src}" alt="${tea.name}" style="width:100%;height:100%;object-fit:cover;border-radius:10px" onerror="this.parentNode.innerHTML='${tea.emoji}'" loading="lazy">`;
 return tea.emoji;
@@ -153,8 +161,8 @@ ${t.exclusive ? '<span class="tag" style="color:#c8891a;border-color:rgba(200,13
 </div>
 </div>
 <div class="tea-right">
-<div class="tea-price">${t.price} ₽</div>
-<div class="tea-weight">${t.weight}</div>
+<div class="tea-price">${listPrice(t).price} ₽</div>
+<div class="tea-weight">${listPrice(t).unit}</div>
 ${t.art?`<div style="font-size:10px;color:var(--text3);margin-top:2px">${t.art}</div>`:''}
 </div>
 </div>`}).join('') || '<div style="color:var(--text3);padding:20px;text-align:center;font-size:13px">Скоро появятся</div>';
@@ -176,7 +184,7 @@ const t = currentTea;
 const el = document.getElementById('screen-detail');
 const isWB = t.status === 'wb';
 const imgs = getAllImgs(t.id);
-window._currentSize = t.sizes ? t.sizes[t.sizes.length > 1 ? 1 : 0] : null;
+window._currentSize = t.sizes && t.sizes.length ? t.sizes[0] : null;  // открываем на 50 г — как в списке
 window._galIdx = 0;
 
 function heroHtml() {
@@ -533,8 +541,8 @@ ${teas.map(t => `
 </div>
 ${t.quote?`<div class="result-quote">${t.quote.slice(0, 100)}...</div>`:''}
 <div class="result-footer">
-<span class="result-price">${t.price} ₽</span>
-<span class="result-weight">${t.weight}</span>
+<span class="result-price">${listPrice(t).price} ₽</span>
+<span class="result-weight">${listPrice(t).unit}</span>
 </div>
 </div>`).join('')}
 <button class="retry-btn" onclick="renderMood()">Попробовать другой подбор</button>
@@ -581,7 +589,7 @@ res.innerHTML = found.length
 <div class="tea-cn">${t.subtitle}</div>
 <div class="tea-tags">${t.tags.slice(0,2).map(tg=>`<span class="tag">${tg}</span>`).join('')}</div>
 </div>
-<div class="tea-right"><div class="tea-price">${t.price} ₽</div></div>
+<div class="tea-right"><div class="tea-price">${listPrice(t).price} ₽</div><div class="tea-weight">${listPrice(t).unit}</div></div>
 </div>`).join('')}</div>`
 : '<div class="no-results">Ничего не найдено</div>';
 }
@@ -615,7 +623,7 @@ ${SETS.map(s => s.teas.map(id => TEAS.find(t => t.id === id)).filter(Boolean).ma
 <div class="tea-name">${t.name}</div>
 <div class="tea-cn">${t.subtitle}</div>
 </div>
-<div class="tea-right"><div class="tea-price">${t.price} ₽</div></div>
+<div class="tea-right"><div class="tea-price">${listPrice(t).price} ₽</div><div class="tea-weight">${listPrice(t).unit}</div></div>
 </div>`).join('')).join('')}
 </div>
 ${renderNav(-1)}

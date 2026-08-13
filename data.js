@@ -58,8 +58,7 @@ const IMAGES = {
     "YW-08_1.jpg",
     "YW-08_2.jpg",
     "YW-08_3.jpg",
-    "YW-08_4.jpg",
-    "YW-08_5.jpg"
+    "YW-08_4.jpg"
   ],
   "21": [
     "GAB-SAP_1.jpg",
@@ -76,11 +75,7 @@ const IMAGES = {
     "SHEN-BL_3.jpg"
   ],
   "25": [
-    "SHU-BG_1.jpg",
-    "SHU-BG_2.jpg",
-    "SHU-BG_3.jpg",
-    "SHU-BG_4.jpg",
-    "SHU-BG_5.jpg"
+    "SHU-BG_1.jpg"
   ],
   "26": [
     "JM-06_1.jpg",
@@ -131,8 +126,7 @@ const IMAGES = {
     "ZJ-26_1.jpg",
     "ZJ-26_2.jpg",
     "ZJ-26_3.jpg",
-    "ZJ-26_4.jpg",
-    "ZJ-26_5.jpg"
+    "ZJ-26_4.jpg"
   ],
   "106": [
     "DHGS-26_1.jpg",
@@ -194,8 +188,7 @@ const IMAGES = {
     "SJJM-26_1.jpg",
     "SJJM-26_2.jpg",
     "SJJM-26_3.jpg",
-    "SJJM-26_4.jpg",
-    "SJJM-26_5.jpg"
+    "SJJM-26_4.jpg"
   ],
   "116": [
     "DGYH-26_1.jpg",
@@ -247,28 +240,22 @@ const IMAGES = {
     "QH-26_5.jpg"
   ],
   "123": [
-    "RG-26_1.jpg",
-    "RG-26_2.jpg"
+    "RG-26_1.jpg"
   ],
   "124": [
-    "YX-26_1.jpg",
-    "YX-26_2.jpg"
+    "YX-26_1.jpg"
   ],
   "125": [
-    "RGG-26_1.jpg",
-    "RGG-26_2.jpg"
+    "RGG-26_1.jpg"
   ],
   "126": [
-    "JMD-26_1.jpg",
-    "JMD-26_2.jpg"
+    "JMD-26_1.jpg"
   ],
   "127": [
-    "RGT-26_1.jpg",
-    "RGT-26_2.jpg"
+    "RGT-26_1.jpg"
   ],
   "128": [
-    "RGH-26_1.jpg",
-    "RGH-26_2.jpg"
+    "RGH-26_1.jpg"
   ],
   "129": [
     "LGTTS-5_1.jpg",
@@ -282,8 +269,7 @@ const IMAGES = {
     "BMS-24_1.jpg",
     "BMS-24_2.jpg",
     "BMS-24_3.jpg",
-    "BMS-24_4.jpg",
-    "BMS-24_5.jpg"
+    "BMS-24_4.jpg"
   ],
   "200": [
     "TRM-16CH_1.jpg",
@@ -1737,7 +1723,7 @@ const TEAS = [
   cat: 'posuda',
   emoji: '🫖',
   left: 1,
-  price: 6630,
+  price: 15000,
   weight: '1 шт',
   status: 'home',
   tags: ['посуда'],
@@ -1753,7 +1739,7 @@ const TEAS = [
   cat: 'posuda',
   emoji: '🫖',
   left: 1,
-  price: 11310,
+  price: 15000,
   weight: '1 шт',
   status: 'home',
   tags: ['посуда'],
