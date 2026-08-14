@@ -19,34 +19,8 @@ const list = IMAGES[id] || [];
 return list.map(f => BASE_IMG + f);
 }
 
-// Браузер держит на экране прошлый кадр, пока не декодирует новый — отсюда
-// микрофриз при листании. Греем всю галерею заранее и меняем src только
-// после decode(), тогда подмена происходит одним кадром.
-const _warm = {};
-function preload(id) {
-if (_warm[id]) return;
-_warm[id] = getAllImgs(id).map(src => { const im = new Image(); im.src = src; return im; });
-}
-
-function swapSrc(el, src) {
-if (!el || el.src === src) return;
-const im = new Image();
-im.src = src;
-const put = () => { el.src = src; };
-if (im.decode) im.decode().then(put).catch(put); else put();
-}
-
 // Цена-ориентир для списков: показываем за 50 г, чтобы не пугать сотней сразу.
 // Где фасовки 50 г нет (пакетики, блины, посуда, распродажа) — базовая цена.
-function thumb(t, cls) {
-const c = cls || 'tea-emoji';
-const src = getImg(t.id);
-if (!src) return `<div class="${c}">${t.emoji}</div>`;
-return `<div class="${c}" style="overflow:hidden;padding:0"><img src="${src}" alt="${t.name}"
-style="width:100%;height:100%;object-fit:cover;border-radius:10px"
-onerror="this.parentNode.innerHTML='${t.emoji}'" loading="lazy"></div>`;
-}
-
 function listPrice(t) {
 const s = (t.sizes || []).find(x => x.g === 50);
 return s ? { price: s.price, unit: '50г' } : { price: t.price, unit: t.weight };
@@ -168,11 +142,14 @@ function renderTeaList(cat) {
 const list = document.getElementById('tea-list');
 if (!list) return;
 const filtered = cat === 'all' ? TEAS : TEAS.filter(t => t.cat === cat);
-warmList(filtered);
 list.innerHTML = filtered.map(t => {
+const src = getImg(t.id);
+const thumb = src
+? `<div class="tea-emoji" style="overflow:hidden;padding:0"><img src="${src}" alt="${t.name}" style="width:100%;height:100%;object-fit:cover;border-radius:10px" onerror="this.parentNode.innerHTML='${t.emoji}'" loading="lazy"></div>`
+: `<div class="tea-emoji">${t.emoji}</div>`;
 return `
 <div class="tea-card" onclick="showDetail(${t.id})">
-${thumb(t)}
+${thumb}
 <div class="tea-info">
 <div class="tea-name">${t.name}</div>
 <div class="tea-cn">${t.subtitle}</div>
@@ -191,10 +168,6 @@ ${t.art?`<div style="font-size:10px;color:var(--text3);margin-top:2px">${t.art}<
 </div>`}).join('') || '<div style="color:var(--text3);padding:20px;text-align:center;font-size:13px">Скоро появятся</div>';
 }
 
-function warmList(list) {
-list.slice(0, 12).forEach(t => { const src = getImg(t.id); if (src) { const im = new Image(); im.src = src; } });
-}
-
 function filterCat(cat, el) {
 currentCat = cat;
 document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
@@ -211,7 +184,6 @@ const t = currentTea;
 const el = document.getElementById('screen-detail');
 const isWB = t.status === 'wb';
 const imgs = getAllImgs(t.id);
-preload(t.id);
 window._currentSize = t.sizes && t.sizes.length ? t.sizes[0] : null;  // открываем на 50 г — как в списке
 window._galIdx = 0;
 
@@ -287,7 +259,7 @@ function showGalleryImg(i) {
 const imgs = getAllImgs(currentTea?.id);
 window._galIdx = i;
 const el = document.getElementById('gallery-img');
-if (el && imgs[i]) swapSrc(el, imgs[i]);
+if (el && imgs[i]) el.src = imgs[i];
 document.querySelectorAll('[id^="gdot-"]').forEach((d,idx) => {
 d.style.background = idx===i ? '#fff' : 'rgba(255,255,255,0.5)';
 });
@@ -318,7 +290,7 @@ const slide = (dir) => {
 if (anim || !multi) return; anim = true;
 img.style.transition = 'transform .15s ease-in'; img.style.transform = 'translateX(' + (dir > 0 ? '-110%' : '110%') + ')';
 setTimeout(() => {
-idx = (idx + dir + imgs.length) % imgs.length; swapSrc(img, imgs[idx]); count(); scale = 1; ox = 0; oy = 0;
+idx = (idx + dir + imgs.length) % imgs.length; img.src = imgs[idx]; count(); scale = 1; ox = 0; oy = 0;
 img.style.transition = 'none'; img.style.transform = 'translateX(' + (dir > 0 ? '110%' : '-110%') + ')';
 void img.offsetWidth;
 img.style.transition = 'transform .15s ease-out'; img.style.transform = 'translateX(0)'; anim = false;
@@ -423,7 +395,7 @@ ${cart.length === 0
 ? `<div class="cart-empty"><i class="ti ti-shopping-bag"></i><div style="font-size:14px">Корзина пуста</div><div style="font-size:12px">Добавьте чай из каталога</div></div>`
 : `<div class="cart-items">${cart.map(i => `
 <div class="tea-card" style="cursor:default">
-${thumb(i)}
+<div class="tea-emoji">${i.emoji}</div>
 <div class="tea-info">
 <div class="tea-name">${i.name}</div>
 <div class="tea-cn">${i.weight}</div>
@@ -647,7 +619,7 @@ el.innerHTML = `
 ${teas.map(t => `
 <div class="result-card" onclick="showDetail(${t.id})">
 <div class="result-top">
-${thumb(t, 'result-emoji')}
+<div class="result-emoji">${t.emoji}</div>
 <div><div class="result-name">${t.name}</div><div class="result-cn">${t.subtitle}</div></div>
 </div>
 ${t.quote?`<div class="result-quote">${t.quote.slice(0, 100)}...</div>`:''}
@@ -694,7 +666,7 @@ t.tags.some(tg => tg.toLowerCase().includes(qLow))
 res.innerHTML = found.length
 ? `<div class="tea-list">${found.map(t => `
 <div class="tea-card" onclick="showDetail(${t.id})">
-${thumb(t)}
+<div class="tea-emoji">${t.emoji}</div>
 <div class="tea-info">
 <div class="tea-name">${t.name}</div>
 <div class="tea-cn">${t.subtitle}</div>
@@ -729,7 +701,7 @@ ${SETS.map(s => `
 <div class="section-label">Чаи в сетах</div>
 ${SETS.map(s => s.teas.map(id => TEAS.find(t => t.id === id)).filter(Boolean).map(t => `
 <div class="tea-card" onclick="showDetail(${t.id})">
-${thumb(t)}
+<div class="tea-emoji">${t.emoji}</div>
 <div class="tea-info">
 <div class="tea-name">${t.name}</div>
 <div class="tea-cn">${t.subtitle}</div>
