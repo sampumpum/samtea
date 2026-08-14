@@ -492,6 +492,10 @@ lines.push(where || 'Адрес не указан — напишу отдель�
 return lines.join('\n');
 }
 
+function openExternal(url) {
+if (tg && tg.openLink) tg.openLink(url); else window.open(url, '_blank');
+}
+
 function sendOrder() {
 const url = 'https://t.me/' + TG_USER + '?text=' + encodeURIComponent(orderText());
 if (tg && tg.openTelegramLink) tg.openTelegramLink(url); else window.open(url, '_blank');
@@ -543,7 +547,15 @@ ${isPickup ? '' : `<div style="margin-top:14px">
 ${field('name', 'Имя и фамилия')}
 ${field('phone', 'Телефон', 'tel')}
 ${field('city', 'Город')}
-${field('address', 'Адрес или номер пункта выдачи')}
+${field('address', 'Адрес пункта выдачи или адрес доставки')}
+<div onclick="openExternal('https://www.cdek.ru/ru/offices')"
+style="display:flex;align-items:center;gap:8px;padding:11px 12px;margin-top:3px;cursor:pointer;
+border-radius:var(--radius-sm);border:0.5px solid var(--gold-border);background:rgba(200,137,26,0.06)">
+<i class="ti ti-map-2" style="font-size:18px;color:var(--gold)"></i>
+<div style="flex:1;font-size:12px;color:var(--gold-light);line-height:1.5">
+Не знаешь, какой пункт удобнее? Посмотри на карте СДЭК и впиши адрес сюда.</div>
+<i class="ti ti-external-link" style="font-size:15px;color:var(--text3)"></i>
+</div>
 </div>`}
 
 <div style="border-top:0.5px solid var(--border);padding-top:12px;margin:14px 0">
