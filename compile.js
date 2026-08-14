@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * compile.js — генерирует data.js из inventory.json
+ * compile.js - генерирует data.js из inventory.json
  *
  * Запуск: node compile.js
  *
@@ -49,7 +49,7 @@ const inStock = t => !t.stock || t.stock.qty === null || t.stock.qty === undefin
 const available = inv.teas.filter(t => t.id && t.available === true && inStock(t));
 const teas = available.map(cleanTea);
 
-// Карта фото: id → [файлы]. Единственный источник правды — inventory.json.
+// Карта фото: id → [файлы]. Единственный источник правды - inventory.json.
 const images = {};
 for (const t of available) {
   if (Array.isArray(t.photos) && t.photos.length) images[t.id] = t.photos;
@@ -78,12 +78,12 @@ function serialize(val, indent = 0) {
   }
   if (Array.isArray(val)) {
     if (val.length === 0) return '[]';
-    // Короткие массивы примитивов — в одну строку
+    // Короткие массивы примитивов - в одну строку
     const allPrimitive = val.every(v => typeof v !== 'object' || v === null);
     if (allPrimitive && val.length <= 6) {
       return '[' + val.map(v => serialize(v, 0)).join(', ') + ']';
     }
-    // Массив объектов (sizes) — каждый объект в одну строку
+    // Массив объектов (sizes) - каждый объект в одну строку
     if (val.every(v => typeof v === 'object' && !Array.isArray(v) && v !== null)) {
       const items = val.map(v => {
         const pairs = Object.entries(v).map(([k, vv]) => `${k}: ${serialize(vv, 0)}`);
@@ -120,7 +120,7 @@ const paymentStr = paymentPairs.join(',\n');
 
 // Итоговый файл
 const output = `// ВНИМАНИЕ: этот файл генерируется автоматически из inventory.json
-// Не редактируй data.js вручную — изменения будут перезаписаны.
+// Не редактируй data.js вручную - изменения будут перезаписаны.
 // Редактируй inventory.json и запусти: node compile.js
 
 const IMAGES = ${JSON.stringify(images, null, 2)};
@@ -151,7 +151,7 @@ console.log('');
 // Показываем что отключено
 const zero = inv.teas.filter(t => t.id && !inStock(t));
 if (zero.length > 0) {
-  console.log('🚫 Нет в наличии (остаток 0) — гасятся автоматически:');
+  console.log('🚫 Нет в наличии (остаток 0) - гасятся автоматически:');
   zero.forEach(t => console.log(`   • [${t.id}] ${t.art} · ${t.name}`));
   console.log('');
 }
@@ -160,7 +160,7 @@ const disabled = inv.teas.filter(t => t.id && t.available !== true && inStock(t)
 if (disabled.length > 0) {
   console.log('📦 Скрыты вручную (включи в inventory.json когда готово):');
   disabled.forEach(t => {
-    const note = t._admin?.notes ? ` — ${t._admin.notes}` : '';
+    const note = t._admin?.notes ? ` - ${t._admin.notes}` : '';
     console.log(`   • [${t.id}] ${t.name}${note}`);
   });
 }

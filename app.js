@@ -5,7 +5,7 @@ if (tg) { tg.ready(); tg.expand(); }
 // ── ФОТО ─────────────────────────────────────────────────────────────────────
 const BASE_IMG = 'https://raw.githubusercontent.com/sampumpum/samtea/main/';
 
-// Фото приходят из data.js (IMAGES) — генерируются из inventory.json.
+// Фото приходят из data.js (IMAGES) - генерируются из inventory.json.
 // Руками здесь ничего не правим: меняй photos в inventory.json и запускай compile.js.
 
 function getImg(id) {
@@ -19,7 +19,7 @@ const list = IMAGES[id] || [];
 return list.map(f => BASE_IMG + f);
 }
 
-// Браузер держит на экране прошлый кадр, пока не декодирует новый — отсюда
+// Браузер держит на экране прошлый кадр, пока не декодирует новый - отсюда
 // микрофриз при листании. Греем всю галерею заранее и меняем src только
 // после decode(), тогда подмена происходит одним кадром.
 const _warm = {};
@@ -37,7 +37,7 @@ if (im.decode) im.decode().then(put).catch(put); else put();
 }
 
 // Цена-ориентир для списков: показываем за 50 г, чтобы не пугать сотней сразу.
-// Где фасовки 50 г нет (пакетики, блины, посуда, распродажа) — базовая цена.
+// Где фасовки 50 г нет (пакетики, блины, посуда, распродажа) - базовая цена.
 function thumb(t, cls) {
 const c = cls || 'tea-emoji';
 const src = getImg(t.id);
@@ -212,7 +212,7 @@ const el = document.getElementById('screen-detail');
 const isWB = t.status === 'wb';
 const imgs = getAllImgs(t.id);
 preload(t.id);
-window._currentSize = t.sizes && t.sizes.length ? t.sizes[0] : null;  // открываем на 50 г — как в списке
+window._currentSize = t.sizes && t.sizes.length ? t.sizes[0] : null;  // открываем на 50 г - как в списке
 window._galIdx = 0;
 
 function heroHtml() {
@@ -258,10 +258,10 @@ ${heroHtml()}
 </div>
 <div class="status-row">
 <div class="dot ${isWB?'dot-blue':'dot-green'}"></div>
-<div class="status-text">${isWB?'Доступен на Wildberries':(t.left?(t.left===1?'Остался 1 — больше не будет':`Осталось ${t.left}`):'Есть в наличии')}</div>
+<div class="status-text">${isWB?'Доступен на Wildberries':(t.left?(t.left===1?'Остался 1 - больше не будет':`Осталось ${t.left}`):'Есть в наличии')}</div>
 </div>
 ${t.art?`<div style="font-size:11px;color:var(--text3);letter-spacing:0.03em;margin-bottom:12px">Артикул: <span style="color:var(--text2)">${t.art}</span></div>`:''}
-${t.exclusive?`<div style="background:rgba(200,137,26,0.1);border:0.5px solid rgba(200,137,26,0.3);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:14px;font-size:12px;color:var(--gold-light)">💎 Эксклюзив — редкий лот из личной коллекции</div>`:''}
+${t.exclusive?`<div style="background:rgba(200,137,26,0.1);border:0.5px solid rgba(200,137,26,0.3);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:14px;font-size:12px;color:var(--gold-light)">💎 Эксклюзив - редкий лот из личной коллекции</div>`:''}
 ${t.quote?`<div class="quote-block">${t.quote}</div>`:''}
 <div id="sizes-wrap">${sizesHtml(initG)}</div>
 ${t.brew?`<div class="brew-label">Как заваривать</div>
@@ -278,7 +278,7 @@ ${t.desc?`<div style="font-size:13px;color:var(--text2);line-height:1.65;margin-
 <div class="action-bar">
 ${isWB
 ?`<button class="btn-secondary" onclick="window.open('${t.wb}','_blank')"><i class="ti ti-external-link"></i> Купить на Wildberries</button>`
-:`<button class="btn-primary" onclick="addToCart(${t.id})">В корзину — <span id="btn-p">${initPrice}</span> ₽</button>`}
+:`<button class="btn-primary" onclick="addToCart(${t.id})">В корзину - <span id="btn-p">${initPrice}</span> ₽</button>`}
 </div>`;
 showScreen('screen-detail');
 }
@@ -391,7 +391,7 @@ if (!tea) return;
 const sel = window._currentSize;
 const size = sel && (tea.sizes || []).some(s => s.g === sel.g) ? sel : null;
 // Крупнейшая фасовка называется по-человечески («блин 357 г», «пакетик ~8 г»),
-// промежуточные — просто граммами
+// промежуточные - просто граммами
 const sizes = tea.sizes || [];
 const isWhole = !size || sizes.length === 1 || size.g === sizes[sizes.length - 1].g;
 cart.push({
@@ -437,7 +437,7 @@ ${thumb(i)}
 <div class="cart-total"><span class="cart-total-label">Итого</span><span class="cart-total-sum">${total} ₽</span></div>`
 }
 <div class="action-bar">
-<button class="btn-primary" onclick="checkout()" ${cart.length === 0 ? 'disabled style="opacity:0.4"' : ''}>Оформить заказ${cart.length > 0 ? ` — ${total} ₽` : ''}</button>
+<button class="btn-primary" onclick="checkout()" ${cart.length === 0 ? 'disabled style="opacity:0.4"' : ''}>Оформить заказ${cart.length > 0 ? ` - ${total} ₽` : ''}</button>
 </div>
 `;
 }
@@ -472,7 +472,7 @@ set('sum-grand', (g + s) + ' ₽');
 function orderText() {
 const g = goodsTotal(), s = shipCost();
 const lines = ['Заказ SAM TEA', ''];
-cart.forEach(i => lines.push(`• ${i.name} ${i.weight} — ${i.price} ₽`));
+cart.forEach(i => lines.push(`• ${i.name} ${i.weight} - ${i.price} ₽`));
 lines.push('', `Товары: ${g} ₽`);
 if (order.method === 'pickup') {
 lines.push('Самовывоз: ' + SHIP.pickup);
@@ -487,7 +487,7 @@ if (order.name.trim() || order.phone.trim()) lines.push([order.name.trim(), orde
 const who = [order.name.trim(), order.phone.trim()].filter(Boolean).join(', ');
 const where = [order.city.trim(), order.address.trim()].filter(Boolean).join(', ');
 lines.push(who || 'Имя и телефон не указаны');
-lines.push(where || 'Адрес не указан — напишу отдельно');
+lines.push(where || 'Адрес не указан - напишу отдельно');
 }
 return lines.join('\n');
 }
@@ -539,8 +539,8 @@ ${cart.map(i => `<div style="display:flex;justify-content:space-between;font-siz
 </div>
 
 <div class="brew-label">Как получить</div>
-${opt('cdek', 'truck', 'СДЭК по России', `До ${SHIP.free} ₽ — ${SHIP.cost} ₽, дальше бесплатно`)}
-${opt('pickup', 'map-pin', 'Самовывоз', SHIP.pickup + ' — бесплатно')}
+${opt('cdek', 'truck', 'СДЭК по России', `До ${SHIP.free} ₽ - ${SHIP.cost} ₽, дальше бесплатно`)}
+${opt('pickup', 'map-pin', 'Самовывоз', SHIP.pickup + ' - бесплатно')}
 
 ${isPickup ? '' : `<div style="margin-top:14px">
 <div class="brew-label">Куда везти</div>
