@@ -117,9 +117,10 @@ const IMAGES = {
   ],
   "104": [
     "TPBJ-26_1.jpg",
-    "TPBJ-26_3.jpg",
     "TPBJ-26_4.jpg",
-    "TPBJ-26_5.jpg"
+    "TPBJ-26_6.jpg",
+    "TPBJ-26_7.jpg",
+    "TPBJ-26_8.jpg"
   ],
   "105": [
     "ZJ-26_1.jpg",
