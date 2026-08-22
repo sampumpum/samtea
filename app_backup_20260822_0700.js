@@ -52,29 +52,6 @@ const s = (t.sizes || []).find(x => x.g === 50);
 return s ? { price: s.price, unit: '50г' } : { price: t.price, unit: t.weight };
 }
 
-// ── «ДНЯ» ─────────────────────────────────────────────────────────────────────
-// Ротация по дате: индекс меняется раз в сутки, крутится по кругу сам.
-// Если у сета или чая в inventory.json стоит featured: true - показываем его,
-// ротация для этой позиции отключается.
-function dayIndex(n) {
-if (!n) return 0;
-const d = new Date();
-const day = Math.floor((d - new Date(d.getFullYear(), 0, 0)) / 86400000);
-return ((day % n) + n) % n;
-}
-
-function setOfDay() {
-return SETS.find(x => x.featured) || SETS[dayIndex(SETS.length)] || SETS[0];
-}
-
-function teaOfDay() {
-const pinned = TEAS.find(t => t.featured);
-if (pinned) return pinned;
-// в ротацию берём только обычные рассыпные сорта: без посуды, пакетиков и лотов распродажи
-const pool = TEAS.filter(t => t.cat !== 'posuda' && (t.sizes || []).some(x => x.g === 50));
-return pool[dayIndex(pool.length)] || TEAS[0];
-}
-
 function imgOrEmoji(tea) {
 
 const src = getImg(tea.id);
@@ -111,7 +88,6 @@ cartBtn.className = 'cart-btn' + (count > 0 ? ' has-items' : '');
 // ── MAIN SCREEN ───────────────────────────────────────────────────────────────
 
 function renderMain() {
-const tod = teaOfDay(), sod = setOfDay();
 document.getElementById('app').innerHTML = `
 <div class="screen active" id="screen-main">
 <div class="header">
@@ -136,15 +112,15 @@ document.getElementById('app').innerHTML = `
 </div>
 
 <div class="specials">
-<div class="special-card" onclick="showDetail(${tod.id})">
+<div class="special-card" onclick="showDetail(1)">
 <div class="special-badge">☕ Сегодня</div>
 <div class="special-title">Чай дня</div>
-<div class="special-sub">${tod.name}</div>
+<div class="special-sub">Лао Ча Тоу</div>
 </div>
 <div class="special-card" onclick="renderSets(); showScreen('screen-sets')">
 <div class="special-badge">🎁 Выгодно</div>
 <div class="special-title">Сет дня</div>
-<div class="special-sub">${sod.name} · ${sod.price} ₽</div>
+<div class="special-sub">6 наборов · от 390 ₽</div>
 </div>
 </div>
 
@@ -429,32 +405,6 @@ renderCart();
 showScreen('screen-cart');
 }
 
-function addSetToCart(setId) {
-const st = SETS.find(x => x.id === setId);
-if (!st) return;
-const items = st.teas.map(id => TEAS.find(t => t.id === id)).filter(Boolean);
-// в каталоге есть одноимённые сорта (три «Цзинь Цзюнь Мэя») - различаем их:
-// покупателю показываем подзаголовок, в заказ для Telegram пишем артикул
-const dup = {};
-items.forEach(t => { dup[t.name] = (dup[t.name] || 0) + 1; });
-const inside = items.map(t => dup[t.name] > 1 && t.subtitle ? `${t.name} (${t.subtitle})` : t.name).join(', ');
-const insideOrder = items.map(t => dup[t.name] > 1 && t.art ? `${t.name} [${t.art}]` : t.name).join(', ');
-cart.push({
-id: st.id,
-cartId: ++_cartSeq,
-isSet: true,
-name: st.name,
-emoji: st.emoji,
-weight: st.weight,
-price: st.price,
-inside,
-insideOrder,
-});
-updateCartBadge();
-renderCart();
-showScreen('screen-cart');
-}
-
 function removeFromCart(cartId) {
 cart = cart.filter(i => i.cartId !== cartId);
 updateCartBadge();
@@ -477,7 +427,6 @@ ${thumb(i)}
 <div class="tea-info">
 <div class="tea-name">${i.name}</div>
 <div class="tea-cn">${i.weight}</div>
-${i.inside ? `<div style="font-size:11px;color:var(--text3);line-height:1.4;margin-top:3px">${i.inside}</div>` : ''}
 </div>
 <div class="tea-right">
 <div class="tea-price">${i.price} ₽</div>
@@ -523,10 +472,7 @@ set('sum-grand', (g + s) + ' ₽');
 function orderText() {
 const g = goodsTotal(), s = shipCost();
 const lines = ['Заказ SAM TEA', ''];
-cart.forEach(i => {
-lines.push(`• ${i.name} ${i.weight} - ${i.price} ₽`);
-if (i.insideOrder || i.inside) lines.push(`  (${i.insideOrder || i.inside})`);
-});
+cart.forEach(i => lines.push(`• ${i.name} ${i.weight} - ${i.price} ₽`));
 lines.push('', `Товары: ${g} ₽`);
 if (order.method === 'pickup') {
 lines.push('Самовывоз: ' + SHIP.pickup);
@@ -773,9 +719,25 @@ ${thumb(t)}
 
 // ── SETS ──────────────────────────────────────────────────────────────────────
 
-// Состав сета: карточки чаёв, кликабельные в карточку сорта
-function setTeas(st) {
-return st.teas.map(id => TEAS.find(t => t.id === id)).filter(Boolean).map(t => `
+function renderSets() {
+const el = document.getElementById('screen-sets');
+el.innerHTML = `
+<div class="header">
+<button class="back-btn" onclick="showScreen('screen-main')"><i class="ti ti-arrow-left"></i> Назад</button>
+<div class="logo">Сеты</div>
+</div>
+<div class="scroll">
+${SETS.map(s => `
+<div class="set-card">
+<div class="set-emoji">${s.emoji}</div>
+<div class="set-info">
+<div class="set-name">${s.name}</div>
+<div class="set-sub">${s.subtitle} · ${s.weight}</div>
+<div class="set-price">${s.price} ₽</div>
+</div>
+</div>
+${s.desc ? `<div style="font-size:12px;color:var(--text3);line-height:1.55;margin:-2px 4px 10px">${s.desc}</div>` : ''}
+${s.teas.map(id => TEAS.find(t => t.id === id)).filter(Boolean).map(t => `
 <div class="tea-card" onclick="showDetail(${t.id})">
 ${thumb(t)}
 <div class="tea-info">
@@ -783,99 +745,8 @@ ${thumb(t)}
 <div class="tea-cn">${t.subtitle}</div>
 </div>
 <div class="tea-right"><div class="tea-price">${listPrice(t).price} ₽</div><div class="tea-weight">${listPrice(t).unit}</div></div>
-</div>`).join('');
-}
-
-function setSaving(st) {
-return st.full && st.full > st.price ? st.full - st.price : 0;
-}
-
-// Сет дня - крупным блоком, с кнопкой заказа
-function setHero(st) {
-const sv = setSaving(st);
-return `
-<div class="set-card" style="cursor:default;align-items:flex-start">
-<div class="set-emoji">${st.emoji}</div>
-<div class="set-info">
-<div class="special-badge">🎁 Сет дня</div>
-<div class="set-name">${st.name}</div>
-<div class="set-sub">${st.subtitle} · ${st.weight}</div>
-<div class="set-price">${st.price} ₽${sv ? ` <span style="font-size:11px;font-weight:400;color:var(--text3)">· поштучно ${st.full} ₽, выгода ${sv} ₽</span>` : ''}</div>
-</div>
-</div>
-${st.desc ? `<div style="font-size:12px;color:var(--text3);line-height:1.55;margin:0 4px 12px">${st.desc}</div>` : ''}
-<button class="btn-primary" onclick="addSetToCart('${st.id}')">В корзину - ${st.price} ₽</button>`;
-}
-
-// Остальные сеты - свёрнутыми строками
-function setRow(st) {
-return `
-<div class="set-card" onclick="toggleSetRow('${st.id}')" style="margin-bottom:6px">
-<div class="set-emoji" style="font-size:26px">${st.emoji}</div>
-<div class="set-info">
-<div class="set-name" style="font-size:15px">${st.name}</div>
-<div class="set-sub">${st.subtitle} · ${st.weight}</div>
-<div class="set-price" style="font-size:14px">${st.price} ₽</div>
-</div>
-<i class="ti ti-chevron-down" id="chev-${st.id}" style="color:var(--text3);font-size:18px;transition:transform 0.15s"></i>
-</div>
-<div id="body-${st.id}" style="display:none;margin:0 0 16px">
-${st.desc ? `<div style="font-size:12px;color:var(--text3);line-height:1.55;margin:0 4px 10px">${st.desc}</div>` : ''}
-${setTeas(st)}
-<div style="height:8px"></div>
-<button class="btn-primary" onclick="event.stopPropagation();addSetToCart('${st.id}')">В корзину - ${st.price} ₽</button>
-</div>`;
-}
-
-let _openSet = null;
-
-function toggleSetRow(id) {
-if (_openSet && _openSet !== id) toggleSetRow(_openSet);
-const body = document.getElementById('body-' + id);
-const chev = document.getElementById('chev-' + id);
-if (!body) return;
-const open = body.style.display !== 'none';
-body.style.display = open ? 'none' : 'block';
-if (chev) chev.style.transform = open ? 'none' : 'rotate(180deg)';
-_openSet = open ? null : id;
-}
-
-let _moreOpen = false;
-
-function toggleMoreSets() {
-const box = document.getElementById('more-sets');
-const chev = document.getElementById('more-sets-chev');
-if (!box) return;
-_moreOpen = box.style.display === 'none';
-box.style.display = _moreOpen ? 'block' : 'none';
-if (chev) chev.style.transform = _moreOpen ? 'rotate(180deg)' : 'none';
-}
-
-function renderSets() {
-const el = document.getElementById('screen-sets');
-const main = setOfDay();
-const rest = SETS.filter(x => x.id !== main.id);
-_openSet = null;
-_moreOpen = false;
-el.innerHTML = `
-<div class="header">
-<button class="back-btn" onclick="showScreen('screen-main')"><i class="ti ti-arrow-left"></i> Назад</button>
-<div class="logo">Сеты</div>
-</div>
-<div class="scroll">
-${setHero(main)}
-<div class="section-label" style="margin-top:18px">Что внутри</div>
-${setTeas(main)}
-${rest.length ? `
-<div style="height:10px"></div>
-<button onclick="toggleMoreSets()" style="width:100%;padding:13px;background:transparent;border:0.5px solid var(--border);
-border-radius:var(--radius);color:var(--text2);font-size:14px;cursor:pointer;font-family:var(--font-sans);
-display:flex;align-items:center;justify-content:center;gap:8px">
-Ещё сеты (${rest.length})
-<i class="ti ti-chevron-down" id="more-sets-chev" style="font-size:18px;transition:transform 0.15s"></i>
-</button>
-<div id="more-sets" style="display:none;margin-top:10px">${rest.map(x => setRow(x)).join('')}</div>` : ''}
-<div style="height:20px"></div>
+</div>`).join('')}
+<div style="height:22px"></div>`).join('')}
 </div>
 ${renderNav(-1)}
 `;
