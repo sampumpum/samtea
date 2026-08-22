@@ -10,7 +10,7 @@ if [ -f .git/index.lock ]; then rm -f .git/index.lock && echo "(убрал за�
 echo "Папка: $(pwd)"
 echo ""
 git add -A
-git commit -m "Описания и заваривание для всех 69 лотов распродажи" || echo "(нечего коммитить — возможно уже закоммичено)"
+git commit -m "Обновление каталога $(date +%Y-%m-%d\ %H:%M)" || echo "(нечего коммитить — возможно уже закоммичено)"
 echo ""
 echo "Пушу на GitHub (может занять пару минут — фото ~67 МБ)..."
 git push origin main
