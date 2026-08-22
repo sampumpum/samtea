@@ -120,7 +120,7 @@ document.getElementById('app').innerHTML = `
 <div class="special-card" onclick="renderSets(); showScreen('screen-sets')">
 <div class="special-badge">🎁 Выгодно</div>
 <div class="special-title">Сет дня</div>
-<div class="special-sub">6 наборов · от 390 ₽</div>
+<div class="special-sub">Жоу Гуи и Цзюнь Мэи · от 390 ₽</div>
 </div>
 </div>
 
@@ -727,6 +727,7 @@ el.innerHTML = `
 <div class="logo">Сеты</div>
 </div>
 <div class="scroll">
+<div style="margin-bottom:14px">
 ${SETS.map(s => `
 <div class="set-card">
 <div class="set-emoji">${s.emoji}</div>
@@ -735,9 +736,10 @@ ${SETS.map(s => `
 <div class="set-sub">${s.subtitle} · ${s.weight}</div>
 <div class="set-price">${s.price} ₽</div>
 </div>
+</div>`).join('')}
 </div>
-${s.desc ? `<div style="font-size:12px;color:var(--text3);line-height:1.55;margin:-2px 4px 10px">${s.desc}</div>` : ''}
-${s.teas.map(id => TEAS.find(t => t.id === id)).filter(Boolean).map(t => `
+<div class="section-label">Чаи в сетах</div>
+${SETS.map(s => s.teas.map(id => TEAS.find(t => t.id === id)).filter(Boolean).map(t => `
 <div class="tea-card" onclick="showDetail(${t.id})">
 ${thumb(t)}
 <div class="tea-info">
@@ -745,8 +747,7 @@ ${thumb(t)}
 <div class="tea-cn">${t.subtitle}</div>
 </div>
 <div class="tea-right"><div class="tea-price">${listPrice(t).price} ₽</div><div class="tea-weight">${listPrice(t).unit}</div></div>
-</div>`).join('')}
-<div style="height:22px"></div>`).join('')}
+</div>`).join('')).join('')}
 </div>
 ${renderNav(-1)}
 `;
